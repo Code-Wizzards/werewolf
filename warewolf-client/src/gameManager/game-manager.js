@@ -1,5 +1,5 @@
 import React, { createContext } from 'react';
-import * as Server from '../MockServer'
+import * as Server from '../RestServer'
 
 export const GameContext = createContext({
     userName:'',
