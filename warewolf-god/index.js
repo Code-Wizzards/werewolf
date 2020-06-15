@@ -35,4 +35,8 @@ app.get('/getPlayers', (req, res) => {
   res.send(players)
 })
 
+app.get('/getGameState', (req, res) => {
+  res.send({players})
+})
+
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))

@@ -12,7 +12,9 @@ export const GameContext = createContext({
 );
 
 export class GameProvider extends React.Component {
+
   addUser = (newUserName) => {
+    console.log('players is ', this.state.players)
     const userDetails = Server.registerUser(newUserName)
     this.setState({ userName: userDetails.name });
     this.setState({ players: [...this.state.players, userDetails ]});
@@ -20,7 +22,6 @@ export class GameProvider extends React.Component {
   };
 
   joinGame = (gameId) => {
-    console.log('joining game:')
     try {
       const gameState = Server.joinGame(gameId)
       this.setState({gameID: gameState.gameId})
@@ -37,9 +38,11 @@ export class GameProvider extends React.Component {
   };
 
   componentDidMount = () => {
-    setInterval(() => {
+    setInterval(async () => {
       console.log('refresh')
-      this.setState({players: Server.fetchGameState().players})
+      const gameStatePromise = Server.fetchGameState()
+      gameStatePromise.then((gameState) => this.setState({players: gameState.players}))
+      
     }, 1000)
 
   }
