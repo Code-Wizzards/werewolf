@@ -41,9 +41,8 @@ export function registerUser(requestedName) {
   return newUser
 }
 
-export async function getPlayers(gameId) {
-  const reqPath = '/getPlayers'
-  const res = await axios(serverURL + reqPath, {
+async function getFromServer(path) {
+  const res = await axios(serverURL + path, {
     method: 'GET',
     mode: 'no-cors',
     headers: {
@@ -55,13 +54,17 @@ export async function getPlayers(gameId) {
   })
  
   console.log('received from server', res)
-
-  console.log(res.data)
-  return JSON.parse(res.data)
+  return res.data
 }
 
-export function fetchGameState() {
-  return { players: getPlayers() }
+export async function getPlayers(gameId) {
+  const players = getFromServer('/getPlayers')
+  return players
+}
+
+export async function fetchGameState() {
+  const gameState = getFromServer('/getGameState')
+  return gameState
 }
 
 export function simulateUsersJoining() {

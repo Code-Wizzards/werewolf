@@ -24,8 +24,6 @@ const players = [
   }
 ]
 
-
-
 app.get('/', (req, res) =>{
   res.send('Hello World!')
 })
@@ -33,6 +31,10 @@ app.get('/', (req, res) =>{
 app.get('/getPlayers', (req, res) => {
 
   res.send(players)
+})
+
+app.get('/getGameState', (req, res) => {
+  res.send({players})
 })
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
