@@ -50,6 +50,7 @@ const games = [
 ]
 
 
+
   
 app.get('/', (req, res) =>{
   res.send('Hello World!')
@@ -63,25 +64,31 @@ app.get('/getGameState', (req, res) => {
   res.send({players})
 })
 // not working in postman, but working in game.
-app.post('/registerUser', (req, res) => {
+app.post('/game/:gameId/registerUser', (req, res) => {
+  const gameId = req.params.gameId
+  console.log('looking for gameid', gameId)
   const newUser = req.body.data
-  players.push(newUser)
- console.log('registering user', players)
+  const thisGame = games.filter((game) =>  game.gameId === gameId)
+  thisGame.players.push(newUser)
+  res.sendStatus(200)
+  console.log('games', games)
 })
 
 
-// getting a CORS error for this
+
 app.post('/createNewGame', (req, res) => {
-  const firstUser = req.body.data
-  console.log(req.body.data)
+  // const firstUser = req.body.data
+  const newGameId = Math.floor(Math.random() * 1000)
+console.log('newgameId', newGameId)
+console.log('games', games)
   games.push( 
-    { id: 124, 
+    { id: newGameId, 
       stage: 'lobby', 
-      players: [firstUser]
+      players: []
     })
-    const gameId = games[games.length-1].id
-    res.send(gameId)
-    console.log(gameId)
+    console.log('sending to clinet', newGameId)
+    res.send({ gameId: newGameId });
+
 })
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))

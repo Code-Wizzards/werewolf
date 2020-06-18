@@ -33,9 +33,8 @@ export function joinGame(gameId){
 }
 
 
-
-function sendToServer(path, data) {
-   axios.post(serverURL + path, {
+async function sendToServer(path, data) {
+   const res = await axios.post(serverURL + path, {
     method: 'POST',
     data: data,
     mode: 'no-cors',
@@ -46,26 +45,24 @@ function sendToServer(path, data) {
     withCredentials: true,
     credentials: 'same-origin',
   })
-  console.log('sendToServer', data)
+  console.log('received from server', res.data)
+  return res.data // need to return something so can send something
 } 
 
-export function registerUser(requestedName) {
+export function registerUser(requestedName, gameId) {
   const newUser = {
     id: 0,
     name: requestedName
   }
-  sendToServer('/registerUser', newUser)
+  console.log('registering users', gameId)
+  sendToServer(`/game/${gameId}/registerUser`, newUser)
   return newUser
 }
 
-export function createNewGame(requestedName) {
-  const newUser = {
-    id: 7,
-    name: requestedName
-  }
-  sendToServer('/createNewGame', newUser)
-
-  return newUser
+export async function createNewGame() {
+  const gameId = await sendToServer('/createNewGame')
+  console.log('received game id from server', gameId)
+  return gameId
 }
 
 
