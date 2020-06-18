@@ -5,6 +5,7 @@ export const GameContext = createContext({
     userName:'',
     players: [],
     gameID: '',
+    newGameStarted: false,
     addUser: () => {},
     startNewGame: () => {},
     joinGame: () => {}
@@ -12,16 +13,26 @@ export const GameContext = createContext({
 );
 
 export class GameProvider extends React.Component {
-
   addUser = (newUserName) => {
-    console.log('players is ', this.state.players)
     const userDetails = Server.registerUser(newUserName)
     this.setState({ userName: userDetails.name });
     this.setState({ players: [...this.state.players, userDetails ]});
+    console.log(this.state)
     Server.simulateUsersJoining()
   };
 
+ createNewGame = (newUserName) => {
+    const userDetails = Server.createNewGame(newUserName)
+    this.setState({ userName: userDetails.name });
+    this.setState({ players: [...this.state.players, userDetails ]});
+    const gameID = Server.createNewGame.gameId
+    this.setState({ gameID: gameID})
+    console.log(userDetails)
+    // Server.simulateUsersJoining()
+  };
+
   joinGame = (gameId) => {
+    console.log('joining game:')
     try {
       const gameState = Server.joinGame(gameId)
       this.setState({gameID: gameState.gameId})
@@ -33,8 +44,12 @@ export class GameProvider extends React.Component {
   
   startNewGame = () => {
     console.log('startNewGame')
-    const newGameID = Server.startGame()
-    this.setState({ gameID: newGameID });
+    // const newGameID = Server.startGame()
+    // this.setState({ gameID: newGameID });
+    this.setState({newGameStarted: true })
+    setTimeout(() => {
+    console.log(this.state.newGameStarted)
+    }, 2000)
   };
 
   componentDidMount = () => {
@@ -42,8 +57,7 @@ export class GameProvider extends React.Component {
       console.log('refresh')
       const gameStatePromise = Server.fetchGameState()
       gameStatePromise.then((gameState) => this.setState({players: gameState.players}))
-      
-    }, 1000)
+    }, 10000)
 
   }
   
@@ -51,6 +65,8 @@ export class GameProvider extends React.Component {
     players: [],
     gameID: '',
     userName:'',
+    newGameStarted: false,
+    createNewGame: this.createNewGame,
     addUser: this.addUser,
     startNewGame: this.startNewGame,
     joinGame: this.joinGame

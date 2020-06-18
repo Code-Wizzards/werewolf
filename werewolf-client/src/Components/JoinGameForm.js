@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import { GameContext } from './gameManager/game-manager'
+import { GameContext } from '../gameManager/game-manager'
 import { Container, Box, TextField } from '@material-ui/core';
 import { Button } from '@material-ui/core';
 import { spacing, flexbox } from '@material-ui/system';

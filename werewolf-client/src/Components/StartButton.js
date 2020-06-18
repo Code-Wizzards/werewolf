@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import { GameContext } from './gameManager/game-manager'
+import { GameContext } from '../gameManager/game-manager'
 import { Button } from '@material-ui/core';
 
 const  StartButton  = () => {
