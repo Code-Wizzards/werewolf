@@ -21,13 +21,16 @@ export class GameProvider extends React.Component {
     Server.simulateUsersJoining()
   };
 
- createNewGame = (newUserName) => {
-    const userDetails = Server.createNewGame(newUserName)
-    this.setState({ userName: userDetails.name });
-    this.setState({ players: [...this.state.players, userDetails ]});
-    const gameID = Server.createNewGame.gameId
-    this.setState({ gameID: gameID})
+ createNewGame = async (userName) => {
+  
+    const gameId  = await Server.createNewGame();
+    console.log('received new gameId', gameId)
+    this.setState({ gameID: gameId})
+    const userDetails = Server.registerUser(userName, gameId)
+    this.setState({ userName: userName });
+    // this.setState({ players: [...this.state.players, userDetails ]});
     console.log(userDetails)
+    this.setState({ newGameStarted: false })
     // Server.simulateUsersJoining()
   };
 
@@ -57,7 +60,7 @@ export class GameProvider extends React.Component {
       console.log('refresh')
       const gameStatePromise = Server.fetchGameState()
       gameStatePromise.then((gameState) => this.setState({players: gameState.players}))
-    }, 10000)
+    }, 1000)
 
   }
   
