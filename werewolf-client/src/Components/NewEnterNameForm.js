@@ -4,10 +4,11 @@ import { Container, Box, TextField } from '@material-ui/core';
 import { Button } from '@material-ui/core';
 import { spacing } from '@material-ui/system';
 
-import { GameContext } from './gameManager/game-manager'
+import { GameContext } from '../gameManager/game-manager'
+import { createNewGame } from '../RestServer';
 
 const EnterNameForm = () => {
-  const {addUser} = useContext(GameContext)
+  const {createNewGame} = useContext(GameContext)
   const [input, setInput] = useState(0);
 
   const handleChange = (e) => {
@@ -15,8 +16,8 @@ const EnterNameForm = () => {
   }
 
   const handleClick = () => {
-    console.log('add user click', input);
-    addUser(input)
+    console.log('add first user click', input);
+    createNewGame(input)
   }
 
   return (
@@ -26,7 +27,7 @@ const EnterNameForm = () => {
       </Box>
       <Box p={1} display="flex" justifyContent="center" alignItems="center">
         <Button color="primary" variant="contained" align="center" onClick={ handleClick }>
-          Join
+         Create New Game
         </Button>
       </Box>
     </Container>

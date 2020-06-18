@@ -32,14 +32,43 @@ export function joinGame(gameId){
   }
 }
 
+
+
+function sendToServer(path, data) {
+   axios.post(serverURL + path, {
+    method: 'POST',
+    data: data,
+    mode: 'no-cors',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json',
+    },
+    withCredentials: true,
+    credentials: 'same-origin',
+  })
+  console.log('sendToServer', data)
+} 
+
 export function registerUser(requestedName) {
   const newUser = {
     id: 0,
     name: requestedName
   }
-  players.push(newUser)
+  sendToServer('/registerUser', newUser)
   return newUser
 }
+
+export function createNewGame(requestedName) {
+  const newUser = {
+    id: 7,
+    name: requestedName
+  }
+  sendToServer('/createNewGame', newUser)
+
+  return newUser
+}
+
+
 
 async function getFromServer(path) {
   const res = await axios(serverURL + path, {
@@ -52,17 +81,19 @@ async function getFromServer(path) {
     withCredentials: true,
     credentials: 'same-origin',
   })
- 
-  console.log('received from server', res)
+  // console.log('received from server', res)
   return res.data
-}
+} 
+
 
 export async function getPlayers(gameId) {
   const players = getFromServer('/getPlayers')
   return players
 }
 
-export async function fetchGameState() {
+
+
+export function fetchGameState() {
   const gameState = getFromServer('/getGameState')
   return gameState
 }
@@ -76,5 +107,6 @@ export function simulateUsersJoining() {
     }
     console.log('user joined:', user)
     players.push(user)
-  }, 5000);
+    console.log(players)
+  }, 30000);
 }
