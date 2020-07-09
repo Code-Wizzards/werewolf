@@ -6,8 +6,8 @@ import { GameConsumer } from './gameManager/game-manager'
 import StartButton from './Components/StartButton'
 import JoinGameForm from './Components/JoinGameForm'
 import PlayerList from './Components/PlayerList';
-import JoinEnterNameForm from './Components/JoinEnterNameForm'
-import NewEnterNameForm from './Components/NewEnterNameForm'
+import EnterNameForm from './Components/EnterNameForm';
+
 
 
 export default class GameScreenManager extends Component {
@@ -20,37 +20,32 @@ export default class GameScreenManager extends Component {
         </Typography>
         <GameConsumer>
         {(gameState) => {
-                if(gameState.newGameStarted) {
-                  return <NewEnterNameForm/>
-                }
-                
-                if(!gameState.gameID) {
-                  return (
-                    <div>
-                      <Container >
-                        <JoinGameForm/>
-                      </Container>
-                      <Container align="center" >
-                        <Box m={5}>
-                          <StartButton/>
-                        </Box>
-                      </Container>
-                    </div>
+
+              if(!gameState.gameId) {
+                return (
+                  <div>
+                    <Container >
+                      <JoinGameForm/>
+                    </Container>
+                    <Container align="center" >
+                      <Box m={5}>
+                        <StartButton/>
+                      </Box>
+                    </Container>
+                  </div>
+                )
+            }
+
+           if(!gameState.userName) {
+                  return ( 
+                    <EnterNameForm/>
                   )
-                } else {
-                      if(!gameState.userName) {
-                      return <JoinEnterNameForm/>
-                      } 
-                    }
-                    
-                  
-                  return (
-                    <PlayerList players={gameState.players}/>
-                  )
-                }
-              }
-              
+                } 
             
+            return (
+              <PlayerList players={gameState.players}/>
+            )
+           }}
         </GameConsumer>
     </div>
     )

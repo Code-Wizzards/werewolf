@@ -25,6 +25,7 @@ export function startGame() {
 }
 
 export function joinGame(gameId){
+  console.log('rs-joingame', gameId)
   return {
     gameId,
     state: "lobby",
@@ -45,24 +46,20 @@ async function sendToServer(path, data) {
     withCredentials: true,
     credentials: 'same-origin',
   })
-  console.log('received from server', res.data)
+  // console.log('received from server', res.data)
   return res.data // need to return something so can send something
 } 
 
 export function registerUser(requestedName, gameId) {
-  const newUser = {
-    id: 0,
-    name: requestedName
-  }
-  console.log('registering users', gameId)
-  sendToServer(`/game/${gameId}/registerUser`, newUser)
-  return newUser
+  
+  console.log('registeruser,rest', gameId);
+ const newUser = sendToServer(`/game/${gameId}/registerUser`, requestedName);
+  return newUser;
 }
 
 export async function createNewGame() {
-  const gameId = await sendToServer('/createNewGame')
-  console.log('received game id from server', gameId)
-  return gameId
+  const gameId = await sendToServer('/createNewGame');
+  return gameId;
 }
 
 
@@ -78,8 +75,11 @@ async function getFromServer(path) {
     withCredentials: true,
     credentials: 'same-origin',
   })
-  // console.log('received from server', res)
-  return res.data
+ if (res.status === 200) {
+   return res.data
+ } else {
+   throw new Error('Could not get game state from server: received status code' + res.status)
+ }
 } 
 
 
@@ -90,9 +90,9 @@ export async function getPlayers(gameId) {
 
 
 
-export function fetchGameState() {
-  const gameState = getFromServer('/getGameState')
-  return gameState
+export function fetchGameState(gameId) {
+  const gameState = getFromServer(`/game/${gameId}/getGameState`) // rpoblem with referencing gameid sometimes its an object, other times not
+    return gameState
 }
 
 export function simulateUsersJoining() {
@@ -102,8 +102,8 @@ export function simulateUsersJoining() {
       id:++pcount,
       name:`p${pcount}`
     }
-    console.log('user joined:', user)
+    // console.log('user joined:', user)
     players.push(user)
-    console.log(players)
+    // console.log(players)
   }, 30000);
 }

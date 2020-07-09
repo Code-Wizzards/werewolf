@@ -13,66 +13,72 @@ export const GameContext = createContext({
 );
 
 export class GameProvider extends React.Component {
-  addUser = (newUserName) => {
-    const userDetails = Server.registerUser(newUserName)
+  addUser = async (newUserName) => {
+    const gameId = this.state.gameId
+    const userDetails = await Server.registerUser(newUserName, gameId)
     this.setState({ userName: userDetails.name });
     this.setState({ players: [...this.state.players, userDetails ]});
     console.log(this.state)
     Server.simulateUsersJoining()
   };
 
- createNewGame = async (userName) => {
-  
-    const gameId  = await Server.createNewGame();
-    console.log('received new gameId', gameId)
-    this.setState({ gameID: gameId})
-    const userDetails = Server.registerUser(userName, gameId)
-    this.setState({ userName: userName });
+ createNewGame = async () => {
+    const gameIdObj  = await Server.createNewGame();
+    const gameId = gameIdObj.gameId  // grab id from object so can pass down just the number, not an object
+    console.log('GM createnewgame', 'obj:', gameIdObj, 'ID:', gameId)
+    this.setState({ gameId: gameId})
+    // const userDetails = Server.registerUser(userName, gameId)
+    // this.setState({ userName: userName });
     // this.setState({ players: [...this.state.players, userDetails ]});
-    console.log(userDetails)
-    this.setState({ newGameStarted: false })
+    // this.setState({ newGameStarted: false })
     // Server.simulateUsersJoining()
+    this.refresh(gameId)
   };
 
   joinGame = (gameId) => {
     console.log('joining game:')
     try {
       const gameState = Server.joinGame(gameId)
-      this.setState({gameID: gameState.gameId})
+      this.setState({gameId: gameState.gameId})
       this.setState({players: gameState.players})
+      console.log(this.state.userName)
+      this.refresh(gameState.gameId)
     } catch (err) {
       alert(err)
     }
   }
   
   startNewGame = () => {
-    console.log('startNewGame')
-    // const newGameID = Server.startGame()
-    // this.setState({ gameID: newGameID });
+    this.createNewGame()
     this.setState({newGameStarted: true })
-    setTimeout(() => {
-    console.log(this.state.newGameStarted)
-    }, 2000)
+
   };
 
-  componentDidMount = () => {
+  refresh = (gameId) => {
     setInterval(async () => {
       console.log('refresh')
-      const gameStatePromise = Server.fetchGameState()
-      gameStatePromise.then((gameState) => this.setState({players: gameState.players}))
+      let gameStatePromise;
+      try {
+        gameStatePromise = Server.fetchGameState(gameId)
+        gameStatePromise.then((gameState) => this.setState({players: gameState.players}))
+      }
+      catch(error) {
+       console.log(error.message)
+      }
+     
     }, 1000)
-
   }
   
   state = {
     players: [],
-    gameID: '',
+    gameId: '',
     userName:'',
     newGameStarted: false,
     createNewGame: this.createNewGame,
     addUser: this.addUser,
     startNewGame: this.startNewGame,
-    joinGame: this.joinGame
+    joinGame: this.joinGame,
+    refresh: this.refresh
   };
 
   render() {

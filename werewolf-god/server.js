@@ -35,23 +35,37 @@ const games = [
     players: [
       {
         id:1,
-        name: "chris Server"
+        name: "chris Server in games array"
       },
       {
         id:2,
-        name: "lucy Server"
+        name: "lucy Server in games array"
       },
       {
         id:3,
-        name: "anna Server"
+        name: "anna Server in games array"
       }
     ]
   }
 ]
 
+function selectGame(gameId) {
+  const gameArr = games.filter((game) => game.id == gameId);
+  const [ selectedGame ] = gameArr;
+  return selectedGame;
+}
 
+function getUniqueRandomNumber(max, arrayToCheck) {
+    let newNumber;
+    if (max <= arrayToCheck.length) {
+      throw new Error('Pool of numbers exhausted')
+    } 
+    while (!newNumber || arrayToCheck.includes(newNumber)) {
+    newNumber = Math.floor(Math.random() * max)
+  }
+  return newNumber;
+}
 
-  
 app.get('/', (req, res) =>{
   res.send('Hello World!')
 })
@@ -60,35 +74,51 @@ app.get('/getPlayers', (req, res) => {
   res.send(players)
 })
 
-app.get('/getGameState', (req, res) => {
-  res.send({players})
-})
-// not working in postman, but working in game.
-app.post('/game/:gameId/registerUser', (req, res) => {
+app.get('/game/:gameId/getGameState', (req, res) => {
+  
   const gameId = req.params.gameId
-  console.log('looking for gameid', gameId)
-  const newUser = req.body.data
-  const thisGame = games.filter((game) =>  game.gameId === gameId)
-  thisGame.players.push(newUser)
-  res.sendStatus(200)
-  console.log('games', games)
+  const thisGame = selectGame(gameId)
+  if (!thisGame) {
+    console.log(`client requested game ${gameId} doesn't exist`)
+    res.send(400)
+  } else {
+  const players =  selectGame(gameId).players
+  res.send({players})
+  }
 })
 
+app.post('/game/:gameId/registerUser', (req, res) => {
+  const gameId = req.params.gameId
+  console.log('post register user', gameId)
+  const requestedUserName = req.body.data
+  const newUser = { id: getUniqueRandomNumber(10000, 
+                    games.map(game => game.players).map(player => player.id)),
+                    name: requestedUserName 
+                   }
+
+  const thisGame = games.filter((game) =>  game.id == gameId)[0] // triple= breaks this
+  thisGame.players.push(newUser)
+  console.log('newUser in post', newUser)
+  res.send(200, newUser)
+})
 
 
 app.post('/createNewGame', (req, res) => {
-  // const firstUser = req.body.data
-  const newGameId = Math.floor(Math.random() * 1000)
-console.log('newgameId', newGameId)
-console.log('games', games)
+  newGameId = getUniqueRandomNumber(1000, games.map(game => game.id))   
+
   games.push( 
     { id: newGameId, 
       stage: 'lobby', 
       players: []
     })
-    console.log('sending to clinet', newGameId)
+    console.log('server.js, createnewgame,', games)
+    
     res.send({ gameId: newGameId });
 
 })
+
+// setInterval(() => {
+//   console.log(games[0].players)
+// }, 8000)
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
