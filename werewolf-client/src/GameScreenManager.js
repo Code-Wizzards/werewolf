@@ -5,7 +5,7 @@ import { Container, Box } from '@material-ui/core';
 import { GameConsumer } from './gameManager/game-manager'
 import StartButton from './Components/StartButton'
 import JoinGameForm from './Components/JoinGameForm'
-import PlayerList from './Components/PlayerList';
+import LobbyScreen from './Components/LobbyScreen'
 import EnterNameForm from './Components/EnterNameForm';
 
 
@@ -40,7 +40,7 @@ export default class GameScreenManager extends Component {
             }
 
             return (
-              <PlayerList players={gameState.players} />
+              <LobbyScreen players={gameState.players} />
             )
           }}
         </GameConsumer>

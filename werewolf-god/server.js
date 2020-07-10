@@ -13,15 +13,15 @@ app.use(cors({ //TODO: this will not work when tha app is hosted online.
 
 const players = [ //TODO: not sure we use this but it may be useful to store all the users on the server, so we can assign ids better.
   {
-    id: 1,
+    id: 100,
     name: "chris Server"
   },
   {
-    id: 2,
+    id: 200,
     name: "lucy Server"
   },
   {
-    id: 3,
+    id: 300,
     name: "anna Server"
   }
 ]
@@ -31,20 +31,7 @@ const games = [
   {
     id: 123,
     stage: 'lobby',
-    players: [
-      {
-        id: 1,
-        name: "chris Server in games array"
-      },
-      {
-        id: 2,
-        name: "lucy Server in games array"
-      },
-      {
-        id: 3,
-        name: "anna Server in games array"
-      }
-    ]
+    players
   }
 ]
 
@@ -86,7 +73,7 @@ app.post('/game/:gameId/registerUser', (req, res) => {
   console.log('post register user', gameId)
   const requestedUserName = req.body.data
   const newUser = {
-    id: getUniqueRandomNumber(10000,
+    id: getUniqueRandomNumber(1199,
       games.map(game => game.players).map(player => player.id)),
     name: requestedUserName
   }
@@ -99,7 +86,7 @@ app.post('/game/:gameId/registerUser', (req, res) => {
 
 
 app.post('/createNewGame', (req, res) => {
-  newGameId = getUniqueRandomNumber(1000, games.map(game => game.id))
+  newGameId = getUniqueRandomNumber(1200, games.map(game => game.id))
   games.push(
     {
       id: newGameId,
