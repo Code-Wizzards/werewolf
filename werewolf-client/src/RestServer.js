@@ -1,6 +1,7 @@
 const axios = require('axios')
 
-const serverURL = "http://localhost:3000"
+const hostURL = window.location.host 
+const serverURL = process.env.NODE_ENV === 'production' ? `http://${hostURL}/api` : 'http://localhost:3000'
 
 const players = [
   {

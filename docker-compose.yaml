@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  reverse:
+    container_name: reverse
+    hostname: reverse
+    image: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./werewolf-site/nginx:/etc/nginx
+      - ./werewolf-site/certs:/etc/ssl/private
+    networks: 
+      - client-network
+      - server-network
+
+  werewolf-client:
+    container_name: werewolf-client
+    hostname: werewolf-client
+    image: codewizzards/werewolf-client 
+    expose:
+      - "80"
+    networks: 
+      - client-network
+
+  werewolf-server:
+    container_name: werewolf-server
+    hostname: werewolf-server
+    image: codewizzards/werewolf-god 
+    expose:
+      - "3000"
+    networks: 
+      - server-network
+
+networks:
+  client-network:
+  server-network:

@@ -9,9 +9,7 @@ import PlayerList from './Components/PlayerList';
 import EnterNameForm from './Components/EnterNameForm';
 
 
-
 export default class GameScreenManager extends Component {
-
   render() {
     return (
       <div>
@@ -19,43 +17,34 @@ export default class GameScreenManager extends Component {
           Werewolf
         </Typography>
         <GameConsumer>
-        {(gameState) => {
-
-              if(!gameState.gameId) {
-                return (
-                  <div>
-                    <Container >
-                      <JoinGameForm/>
-                    </Container>
-                    <Container align="center" >
-                      <Box m={5}>
-                        <StartButton/>
-                      </Box>
-                    </Container>
-                  </div>
-                )
+          {(gameState) => {
+            if (!gameState.gameId) {
+              return (
+                <div>
+                  <Container >
+                    <JoinGameForm />
+                  </Container>
+                  <Container align="center" >
+                    <Box m={5}>
+                      <StartButton />
+                    </Box>
+                  </Container>
+                </div>
+              )
             }
 
-           if(!gameState.userName) {
-                  return ( 
-                    <EnterNameForm/>
-                  )
-                } 
-            
+            if (!gameState.userName) {
+              return (
+                <EnterNameForm />
+              )
+            }
+
             return (
-              <PlayerList players={gameState.players}/>
+              <PlayerList players={gameState.players} />
             )
-           }}
+          }}
         </GameConsumer>
-    </div>
+      </div>
     )
   }
 }
-
-
-
-
-
-
-// if(gameState.newGameStarted === true) {
-//   return <NewEnterNameForm/>

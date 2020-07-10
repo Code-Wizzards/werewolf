@@ -27,11 +27,6 @@ export class GameProvider extends React.Component {
     const gameId = gameIdObj.gameId  // grab id from object so can pass down just the number, not an object
     console.log('GM createnewgame', 'obj:', gameIdObj, 'ID:', gameId)
     this.setState({ gameId: gameId})
-    // const userDetails = Server.registerUser(userName, gameId)
-    // this.setState({ userName: userName });
-    // this.setState({ players: [...this.state.players, userDetails ]});
-    // this.setState({ newGameStarted: false })
-    // Server.simulateUsersJoining()
     this.refresh(gameId)
   };
 
@@ -51,7 +46,6 @@ export class GameProvider extends React.Component {
   startNewGame = () => {
     this.createNewGame()
     this.setState({newGameStarted: true })
-
   };
 
   refresh = (gameId) => {
@@ -63,9 +57,8 @@ export class GameProvider extends React.Component {
         gameStatePromise.then((gameState) => this.setState({players: gameState.players}))
       }
       catch(error) {
-       console.log(error.message)
+        console.log(error.message)
       }
-     
     }, 1000)
   }
   
