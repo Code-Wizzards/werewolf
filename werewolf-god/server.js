@@ -84,6 +84,27 @@ app.post('/game/:gameId/registerUser', (req, res) => {
   res.send(200, newUser)
 })
 
+function getPlayer (playerId, game) {
+  const player =  game.players.filter(player => player.id == playerId)[0]
+  if (!player) {
+    throw new Error(`player with id ${playerId} not found in game ${JSON.stringify(game)}`)
+  }
+  return player
+}
+
+app.post('/game/:gameId/player/:playerId/setStatus', (req, res) => {
+  try {
+    const gameId = req.params.gameId
+    const game = selectGame(gameId)
+    const playerId = req.params.playerId
+    const player = getPlayer(playerId, game)
+    player.status = req.body.data.status
+    res.sendStatus(200)
+  } catch (err) {
+    console.log('Error setting status:', err)
+    res.sendStatus(500)
+  }
+})
 
 app.post('/createNewGame', (req, res) => {
   newGameId = getUniqueRandomNumber(1200, games.map(game => game.id))

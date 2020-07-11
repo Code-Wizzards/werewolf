@@ -1,22 +1,34 @@
-import React from 'react'
-import { makeStyles } from '@material-ui/core/styles';
+import React, {useContext, useState} from 'react';
+import { GameContext } from '../gameManager/game-manager'
 import PlayerList from './PlayerList'
-import { Container, Box, Button, TextField, Avatar, List, ListItem, ListItemAvatar, ListItemText, Divider } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
+import { Container, Box, Button, TextField } from '@material-ui/core';
+import { setPlayerStatus } from '../RestServer'
 
-export default function LobbyScreen({ players }) {
+const LobbyScreen = ({ players }) => {
+  const [ statusInput, setStatusInput ] = useState('')
+  const { userId, gameId } = useContext(GameContext)
+
+  const handleChange = (e) => {
+    setStatusInput(e.target.value)
+  }
+
+  const handleClick = () => {
+    setPlayerStatus(userId, gameId, statusInput)
+    setStatusInput('')
+  }
+
   return (
-    <Container alignItems="center">
+    <Container>
 
       <PlayerList players={players} />
-      <Button color="primary" variant="contained" align="center">
+      <Button color="primary" variant="contained" align="center" >
         Start The Game
       </Button>
 
       <Box>
         <Box p={3}>
-          <TextField id="name-input" label="Set a Status" variant="outlined" />
-          <Button color="secondary" variant="contained" align="center" >
+          <TextField value={statusInput} id="status-input" label="Set a Status" variant="outlined" onChange={handleChange}/>
+          <Button color="secondary" variant="contained" align="center" onClick={handleClick}>
             Set
         </Button>
         </Box>
@@ -25,3 +37,5 @@ export default function LobbyScreen({ players }) {
     </Container>
   )
 }
+
+export default LobbyScreen

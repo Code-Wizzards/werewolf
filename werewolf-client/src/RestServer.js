@@ -25,7 +25,7 @@ export function startGame() {
   }
 }
 
-export function joinGame(gameId){
+export function joinGame(gameId){ //TODO: this should call out to the server to see if that game exists or not
   console.log('rs-joingame', gameId)
   return {
     gameId,
@@ -34,11 +34,15 @@ export function joinGame(gameId){
   }
 }
 
+export function setPlayerStatus(playerId, gameId, status) {
+  const data = {status}
+  sendToServer(`/game/${gameId}/player/${playerId}/setStatus`, data);
+}
 
 async function sendToServer(path, data) {
-   const res = await axios.post(serverURL + path, {
+  const res = await axios.post(serverURL + path, {
     method: 'POST',
-    data: data,
+    data,
     mode: 'no-cors',
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -52,9 +56,8 @@ async function sendToServer(path, data) {
 } 
 
 export function registerUser(requestedName, gameId) {
-  
   console.log('registeruser,rest', gameId);
- const newUser = sendToServer(`/game/${gameId}/registerUser`, requestedName);
+  const newUser = sendToServer(`/game/${gameId}/registerUser`, requestedName);
   return newUser;
 }
 
@@ -62,8 +65,6 @@ export async function createNewGame() {
   const gameId = await sendToServer('/createNewGame');
   return gameId;
 }
-
-
 
 async function getFromServer(path) {
   const res = await axios(serverURL + path, {
@@ -76,20 +77,17 @@ async function getFromServer(path) {
     withCredentials: true,
     credentials: 'same-origin',
   })
- if (res.status === 200) {
-   return res.data
- } else {
-   throw new Error('Could not get game state from server: received status code' + res.status)
- }
+  if (res.status === 200) {
+    return res.data
+  } else {
+    throw new Error('Could not get game state from server: received status code' + res.status)
+  }
 } 
-
 
 export async function getPlayers(gameId) {
   const players = getFromServer('/getPlayers')
   return players
 }
-
-
 
 export function fetchGameState(gameId) {
   const gameState = getFromServer(`/game/${gameId}/getGameState`) // rpoblem with referencing gameid sometimes its an object, other times not

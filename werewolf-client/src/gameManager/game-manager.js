@@ -3,12 +3,14 @@ import * as Server from '../RestServer'
 
 export const GameContext = createContext({
     userName:'',
+    userId:'',
     players: [],
-    gameID: '',
+    gameId: '',
     newGameStarted: false,
     addUser: () => {},
     startNewGame: () => {},
-    joinGame: () => {}
+    joinGame: () => {},
+    setPlayerStatus: () => {}
   }
 );
 
@@ -17,12 +19,13 @@ export class GameProvider extends React.Component {
     const gameId = this.state.gameId
     const userDetails = await Server.registerUser(newUserName, gameId)
     this.setState({ userName: userDetails.name });
+    this.setState({ userId: userDetails.id });
     this.setState({ players: [...this.state.players, userDetails ]});
     console.log(this.state)
     Server.simulateUsersJoining()
   };
 
- createNewGame = async () => {
+createNewGame = async () => {
     const gameIdObj  = await Server.createNewGame();
     const gameId = gameIdObj.gameId  // grab id from object so can pass down just the number, not an object
     console.log('GM createnewgame', 'obj:', gameIdObj, 'ID:', gameId)
@@ -36,7 +39,6 @@ export class GameProvider extends React.Component {
       const gameState = Server.joinGame(gameId)
       this.setState({gameId: gameState.gameId})
       this.setState({players: gameState.players})
-      console.log(this.state.userName)
       this.refresh(gameState.gameId)
     } catch (err) {
       alert(err)
