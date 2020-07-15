@@ -32,7 +32,7 @@ export default function PlayerList({ players }) {
 }
 
 const PlayerRow = (player, classes) => {
-  const avatarNumber =Math.floor(player.id/100) +1
+  const avatarNumber = Math.floor(player.id/100) +1
   const playerAvatarFile = `/Avatars/a${avatarNumber}.png`
   return (
     <Container>

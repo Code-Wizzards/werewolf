@@ -3,6 +3,8 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const app = express().use(bodyParser.json())
 
+const assignRoles = require('./assignRoles')
+
 const port = 3000;
 
 app.use(cors({ //TODO: this will not work when tha app is hosted online.
@@ -63,8 +65,11 @@ app.get('/game/:gameId/getGameState', (req, res) => {
     console.log(`client requested game ${gameId} doesn't exist`)
     res.sendStatus(400)
   } else {
-    const players = selectGame(gameId).players
-    res.send({ players })
+
+    // const playerInfo = {id, name, role}
+    // const userPlayerList = playerList.map(player => {player.id, player.name})
+    // const userGameState = {playerInfo, players: userPlayerList, id:game.id, state:game.state} 
+    res.send({ game })
   }
 })
 
@@ -117,5 +122,24 @@ app.post('/createNewGame', (req, res) => {
   console.log('server.js, createnewgame,', games)
   res.send({ gameId: newGameId })
 })
+
+app.post('/game/:gameId/startGame'),  (req, res) => {
+  const gameId = req.params.gameId
+  const game = selectGame(gameId)
+
+  if (!game.stage === 'lobby') {
+    res.sendStatus(400)
+    return
+  }
+  if (game.players.length < 7) {
+    res.send(400, 'Must have at least 7 players to start a game')
+    return
+  }
+  game.players = assignRoles(game.players)
+  game.state = 'running'
+
+  res.sendStatus(200)
+}
+
 
 app.listen(port, () => console.log(`Werewolf server listening on port ${port}`))
