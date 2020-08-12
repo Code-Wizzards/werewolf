@@ -23,7 +23,7 @@ export default function PlayerList({ players }) {
 
   const classes = useStyles();
 
-  const playerRows = players.map(player => PlayerRow(player, classes))
+  const playerRows = players?.map(player => PlayerRow(player, classes))
   return (
     <List>
       {playerRows}

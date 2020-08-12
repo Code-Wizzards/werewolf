@@ -66,10 +66,8 @@ app.get('/game/:gameId/getGameState', (req, res) => {
     res.sendStatus(400)
   } else {
 
-    // const playerInfo = {id, name, role}
-    // const userPlayerList = playerList.map(player => {player.id, player.name})
-    // const userGameState = {playerInfo, players: userPlayerList, id:game.id, state:game.state} 
-    res.send({ game })
+console.log(JSON.stringify(thisGame))
+    res.send(thisGame)
   }
 })
 

@@ -16,19 +16,17 @@ export const GameContext = createContext({
 
 export class GameProvider extends React.Component {
   addUser = async (newUserName) => {
+    console.log('players is', this.state.players)
     const gameId = this.state.gameId
     const userDetails = await Server.registerUser(newUserName, gameId)
-    this.setState({ userName: userDetails.name });
-    this.setState({ userId: userDetails.id });
-    this.setState({ players: [...this.state.players, userDetails ]});
+    this.setState({ userName: userDetails.name })
+    this.setState({ userId: userDetails.id })
     console.log(this.state)
-    Server.simulateUsersJoining()
   };
 
 createNewGame = async () => {
     const gameIdObj  = await Server.createNewGame();
     const gameId = gameIdObj.gameId  // grab id from object so can pass down just the number, not an object
-    console.log('GM createnewgame', 'obj:', gameIdObj, 'ID:', gameId)
     this.setState({ gameId: gameId})
     this.refresh(gameId)
   };
@@ -52,14 +50,12 @@ createNewGame = async () => {
 
   refresh = (gameId) => {
     setInterval(async () => {
-      console.log('refresh')
-      let gameStatePromise;
       try {
-        gameStatePromise = Server.fetchGameState(gameId)
-        gameStatePromise.then((gameState) => this.setState({players: gameState.players}))
+        const gameState = await Server.fetchGameState(gameId)
+        this.setState({players: gameState.players})
       }
       catch(error) {
-        console.log(error.message)
+        console.log('Error refreshing gameState:', error)
       }
     }, 1000)
   }
