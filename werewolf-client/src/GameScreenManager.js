@@ -5,33 +5,47 @@ import { GameConsumer } from './gameManager/game-manager'
 import StartScreen from './Components/StartScreen'
 import LobbyScreen from './Components/LobbyScreen'
 import EnterNameForm from './Components/EnterNameForm';
-
+import Title from './Components/Title';
+import RoleCard from './Components/RoleCard/RoleCard';
 
 export default class GameScreenManager extends Component {
   render() {
     return (
       <div>
-        <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-          Werewolf
-        </Typography>
+       <Title />
         <GameConsumer>
           {(gameState) => {
-            if (!gameState.gameId) {
+          const { gameId, userName, gameStage, players, userRole } = gameState;
+          
+          if (!gameId) {
               return (
                 <StartScreen />
               )
             }
-            if (!gameState.userName) {
+            if (!userName) {
               return (
                 <EnterNameForm />
               )
             }
+            if (gameStage == 'lobby') {
             return (
-              <LobbyScreen players={gameState.players} />
-            )
+              <LobbyScreen players={players} />
+             )
+            }
+            if (gameStage === 'role assignment') {
+              console.log('GSM', userRole)
+              return (
+                <RoleCard role={userRole} />
+              )
+            }
           }}
         </GameConsumer>
       </div>
     )
   }
 }
+
+
+// <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+// Werewolf
+// </Typography>

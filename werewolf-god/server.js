@@ -2,8 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const app = express().use(bodyParser.json())
-
-const assignRoles = require('./assignRoles')
+const { assignRoles } = require('./assignRoles')
 
 const port = 3000;
 
@@ -25,6 +24,22 @@ const players = [ //TODO: not sure we use this but it may be useful to store all
   {
     id: 300,
     name: "anna Server"
+  },
+   {
+    id: 400,
+    name: "duke"
+  },
+  {
+    id: 500,
+    name: "billy"
+  },
+  {
+    id: 600,
+    name: "lionel"
+  },
+  {
+  id: 700,
+  name: "talulah"
   }
 ]
 
@@ -37,10 +52,18 @@ const games = [
   }
 ]
 
+
 function selectGame(gameId) {
   const gameArr = games.filter((game) => game.id == gameId);
   const [selectedGame] = gameArr;
   return selectedGame;
+}
+
+function selectUser(userId, gameId) {
+  const game = selectGame(gameId)
+  const userArr = game.players.filter((user => user.id == userId))
+  const [user] = userArr
+  return user;
 }
 
 function getUniqueRandomNumber(max, arrayToCheck) {
@@ -60,14 +83,12 @@ app.get('/getPlayers', (req, res) => { //TODO: dont think this is needed
 
 app.get('/game/:gameId/getGameState', (req, res) => {
   const gameId = req.params.gameId
-  const thisGame = selectGame(gameId)
-  if (!thisGame) {
+  const requestedGame = selectGame(gameId)
+  if (!requestedGame) {
     console.log(`client requested game ${gameId} doesn't exist`)
     res.sendStatus(400)
   } else {
-
-console.log(JSON.stringify(thisGame))
-    res.send(thisGame)
+    res.send(requestedGame)
   }
 })
 
@@ -119,25 +140,32 @@ app.post('/createNewGame', (req, res) => {
     })
   console.log('server.js, createnewgame,', games)
   res.send({ gameId: newGameId })
-})
+});
 
-app.post('/game/:gameId/startGame'),  (req, res) => {
+app.get('/game/:gameId/user/:userId/startGame',  (req, res) => {
   const gameId = req.params.gameId
+  const userId = req.params.userId
   const game = selectGame(gameId)
 
   if (!game.stage === 'lobby') {
     res.sendStatus(400)
     return
   }
+
   if (game.players.length < 7) {
     res.send(400, 'Must have at least 7 players to start a game')
     return
   }
-  game.players = assignRoles(game.players)
-  game.state = 'running'
 
-  res.sendStatus(200)
-}
+  game.players = assignRoles(game.players)
+  game.stage = 'role assignment'
+
+  const userRole = selectUser(userId, gameId).role
+  console.log(userRole)
+  res.send(userRole)
+});
+
+
 
 
 app.listen(port, () => console.log(`Werewolf server listening on port ${port}`))

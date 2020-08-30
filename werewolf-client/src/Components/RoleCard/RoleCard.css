@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap');
+
+.RoleCard {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.RoleCard > h1 {
+  font-family: 'Gloria Hallelujah', cursive;
+  font-size: 32px; 
+  text-align: center;
+  letter-spacing: 0.4rem;
+  text-transform: uppercase;
+  margin: 20px 0px 30px 0px;
+}
+
+.RoleCard > p {
+  margin-bottom: 40px;
+}

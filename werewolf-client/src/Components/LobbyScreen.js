@@ -3,12 +3,14 @@ import { GameContext } from '../gameManager/game-manager'
 import { makeStyles } from '@material-ui/core/styles';
 import PlayerList from './PlayerList'
 import { Container, Box, Button, TextField, Paper, LinearProgress, Typography } from '@material-ui/core';
-import { setPlayerStatus } from '../RestServer'
+import { setPlayerStatus } from '../RestServer';
+import './styles.css';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
+    justifyContent: 'center',
     padding: theme.spacing(1),
     '& > *': {
       margin: theme.spacing(1),
@@ -32,11 +34,14 @@ const LobbyScreen = ({ players }) => {
     }
   }
 
-
   const classes = useStyles();
+
+  const {startGame} = useContext(GameContext)
 
   return (
     <Container>
+
+      <h2>Your game ID is {gameId}</h2>
 
       <Box p={1}>
         <Paper elevation={3}>
@@ -57,7 +62,7 @@ const LobbyScreen = ({ players }) => {
       </Box>
       <div className={classes.root}>
         <TextField value={statusInput} id="status-input" label="Set a Status" variant="outlined" onChange={handleChange} onKeyDown={handleKeyPress}/>
-        <Button color="primary" variant="contained" >
+        <Button onClick={startGame} color="primary" variant="contained" >
           Start The Game
         </Button>
       </div>

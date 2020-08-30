@@ -7,20 +7,23 @@ export const GameContext = createContext({
     players: [],
     gameId: '',
     newGameStarted: false,
-    addUser: () => {},
-    startNewGame: () => {},
-    joinGame: () => {},
-    setPlayerStatus: () => {}
+    // addUser: () => {},
+    // startNewGame: () => {},
+    // joinGame: () => {},
+    // setPlayerStatus: () => {},
+    // startGame: () => {}
   }
 );
 
 export class GameProvider extends React.Component {
+  
   addUser = async (newUserName) => {
     console.log('players is', this.state.players)
     const gameId = this.state.gameId
     const userDetails = await Server.registerUser(newUserName, gameId)
-    this.setState({ userName: userDetails.name })
-    this.setState({ userId: userDetails.id })
+    this.setState({ userName: userDetails.name, 
+                    userId: userDetails.id,
+                    gameStage: 'lobby'})
     console.log(this.state)
   };
 
@@ -48,6 +51,11 @@ createNewGame = async () => {
     this.setState({newGameStarted: true })
   };
 
+  startGame = async () => {
+   const userRole = await Server.startGame(this.state.gameId, this.state.userId)
+   this.setState({userRole: userRole, gameStage: "role assignment"})
+  }
+
   refresh = (gameId) => {
     setInterval(async () => {
       try {
@@ -59,19 +67,24 @@ createNewGame = async () => {
       }
     }, 1000)
   }
-  
+
+
   state = {
     players: [],
     gameId: '',
     userName:'',
+    userId: '',
+    userRole: '',
+    gameStage: '',
     newGameStarted: false,
     createNewGame: this.createNewGame,
     addUser: this.addUser,
     startNewGame: this.startNewGame,
     joinGame: this.joinGame,
-    refresh: this.refresh
-  };
-
+    refresh: this.refresh,
+    startGame: this.startGame
+  }; 
+  
   render() {
     return (
       <GameContext.Provider value={this.state}>

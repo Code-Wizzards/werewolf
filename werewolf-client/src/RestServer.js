@@ -18,12 +18,12 @@ const players = [
   }
 ]
 
-export function startGame() {
-  return {
-    gameID:'123abc',
-    state:'lobby'
-  }
-}
+// export function startGame() {
+//   return {
+//     gameID:'123abc',
+//     state:'lobby'
+//   }
+// }
 
 export function joinGame(gameId){ //TODO: this should call out to the server to see if that game exists or not
   console.log('rs-joingame', gameId)
@@ -105,4 +105,11 @@ export function simulateUsersJoining() {
     players.push(user)
     // console.log(players)
   }, 30000);
+}
+
+
+export async function startGame(gameId, userId) {
+ const  userRole  = await getFromServer(`/game/${gameId}/user/${userId}/startGame`)
+ console.log('RS-startGame', userRole)
+ return userRole
 }

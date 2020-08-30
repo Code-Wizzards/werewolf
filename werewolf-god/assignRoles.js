@@ -1,6 +1,6 @@
 function assignRoles (playerList) {
   const numPlayers = playerList.length
-  let rolePool = ['werewolf', 'werewolf', 'seeer', 'healer']
+  let rolePool = ['werewolf', 'werewolf', 'seer', 'healer']
 
   while (rolePool.length < numPlayers) {
     rolePool.push('villager')
@@ -14,4 +14,4 @@ function assignRoles (playerList) {
   })
 }
 
-module.exports = {assignRoles}
+module.exports = { assignRoles }
