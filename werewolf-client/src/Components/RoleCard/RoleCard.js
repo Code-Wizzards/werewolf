@@ -17,7 +17,7 @@ const RoleCard = ({ role }) => {
       break;
 
     case "healer":
-      color = "#7bdf7f";
+      color = "#45b048";
       break;
 
     case "seer":
@@ -34,11 +34,12 @@ const RoleCard = ({ role }) => {
 
 
   return (
+    <div className="rolecard-container">
     <div className="RoleCard">
-      <h2>You are a...</h2>
       <h1 style={{color: color}}>{role}</h1>
       <RoleImage role={role} />
       <RoleInfo role={role} />
+      </div>
       <Button color="primary" variant="contained" align="center">Ready!</Button>
     </div>
   );

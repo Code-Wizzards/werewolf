@@ -4,7 +4,7 @@ const RoleInfo = ({ role }) => {
   if (role === "villager") {
     return (
       <p>
-        You are human and your village is under attack from Werewolves! Each day
+       Your village is under attack from Werewolves! Each day
         you must discuss who could be a werewolf and vote to kill or save a suspect.
         The villagers win if they find and kill all the werewolves. Villagers
         can accuse another player, second someone else's vote and vote on the
@@ -30,7 +30,12 @@ const RoleInfo = ({ role }) => {
   if (role === "seer") {
     return (
       <p>
-       You are a villager with a special power: the ability to know the truth by moonlight.
+       You are a villager with a special power: the ability to know the truth by moonlight.  
+       Your village is under attack from Werewolves but you can use your powers to help save your fellow villagers. 
+       Each day you must discuss who could be a werewolf and vote to kill or save a suspect.
+       The villagers win if they find and kill all the werewolves. As the Seer, you will wake each night at midnight 
+       when the moon is full to find out the truth about one other player. Be careful at giving away your true identity, 
+       werewolves are known to particularly enjoy Seer flesh...
       </p>
     )
   }
@@ -38,7 +43,7 @@ const RoleInfo = ({ role }) => {
   if (role === "healer") {
     return (
       <p>
-      You are a villager with a special power: the ability to bring someone back from the brink of death.
+      You are a villager with a special power: the ability to bring someone back from the brink of death. 
       </p>
     )
   }

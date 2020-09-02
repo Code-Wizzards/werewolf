@@ -30,7 +30,7 @@ const RoleImage = ({ role }) => {
       console.log("error");
   }
 
-  return <img alt="your role" src={roleImage} style={{width: "50%"}} />;
+  return <img alt="your role" src={roleImage} style={{maxHeight: "350px"}} />;
 };
 
 export default RoleImage;
