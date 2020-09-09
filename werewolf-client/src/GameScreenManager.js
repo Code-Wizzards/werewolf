@@ -38,7 +38,7 @@ export default class GameScreenManager extends Component {
                 <RoleCard role={userRole} />
               )
             }
-            if (isPlayerAlive === true) {
+            if (gameStage === 'running') {
               return (
                 <DaytimeScreen />
               )
