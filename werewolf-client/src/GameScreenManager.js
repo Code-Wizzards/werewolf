@@ -7,6 +7,7 @@ import LobbyScreen from './Components/LobbyScreen'
 import EnterNameForm from './Components/EnterNameForm';
 import Title from './Components/Title';
 import RoleCard from './Components/RoleCard/RoleCard';
+import DaytimeScreen from './Components/DaytimeScreen/DaytimeScreen';
 
 export default class GameScreenManager extends Component {
   render() {
@@ -15,7 +16,7 @@ export default class GameScreenManager extends Component {
        <Title />
         <GameConsumer>
           {(gameState) => {
-          const { gameId, userName, gameStage, players, userRole } = gameState;
+          const { gameId, userName, gameStage, players, userRole, isPlayerAlive } = gameState;
           
           if (!gameId) {
               return (
@@ -27,15 +28,19 @@ export default class GameScreenManager extends Component {
                 <EnterNameForm />
               )
             }
-            if (gameStage == 'lobby') {
+            if (gameStage === 'lobby') {
             return (
               <LobbyScreen players={players} />
              )
             }
             if (gameStage === 'role assignment') {
-              console.log('GSM', userRole)
               return (
                 <RoleCard role={userRole} />
+              )
+            }
+            if (isPlayerAlive === true) {
+              return (
+                <DaytimeScreen />
               )
             }
           }}

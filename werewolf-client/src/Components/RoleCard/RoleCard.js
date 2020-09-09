@@ -1,10 +1,12 @@
-import React from "react";
+import React, {useContext } from "react";
+import { GameContext } from '../../gameManager/game-manager'
 import RoleInfo from "./RoleInfo";
 import RoleImage from "./RoleImage";
 import { Button } from '@material-ui/core';
 import './RoleCard.css';
 
 const RoleCard = ({ role }) => {
+  const { updateIsPlayerAlive } = useContext(GameContext)
   
   let color;
   switch (role) {
@@ -40,7 +42,7 @@ const RoleCard = ({ role }) => {
       <RoleImage role={role} />
       <RoleInfo role={role} />
       </div>
-      <Button color="primary" variant="contained" align="center">Ready!</Button>
+      <Button onClick={updateIsPlayerAlive} color="primary" variant="contained" align="center">Ready!</Button>
     </div>
   );
 };

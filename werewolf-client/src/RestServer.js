@@ -110,6 +110,10 @@ export function simulateUsersJoining() {
 
 export async function startGame(gameId, userId) {
  const  userRole  = await getFromServer(`/game/${gameId}/user/${userId}/startGame`)
- console.log('RS-startGame', userRole)
  return userRole
 }
+
+export async function updateIsPlayerAlive(gameId, userId) {
+ const isPlayerAlive = await sendToServer(`/game/${gameId}/user/${userId}/updateIsPlayerAlive`)
+  return isPlayerAlive
+ }

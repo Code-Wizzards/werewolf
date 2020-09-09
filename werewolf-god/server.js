@@ -78,6 +78,7 @@ function getUniqueRandomNumber(max, arrayToCheck) {
 }
 
 app.get('/getPlayers', (req, res) => { //TODO: dont think this is needed
+  console.log('sending players', players)
   res.send(players)
 })
 
@@ -166,6 +167,28 @@ app.get('/game/:gameId/user/:userId/startGame',  (req, res) => {
 });
 
 
+app.post(`/game/:gameId/user/:userId/updateIsPlayerAlive`, (req, res) => {
+  console.log('server- updating isplayeralive')
+  const gameId = req.params.gameId
+  const game = selectGame(gameId)
+  const playerId = req.params.userId
+  const player = getPlayer(playerId, game)
+
+  if (!player.isPlayerAlive) {
+   player.isPlayerAlive = true;
+   game.stage = 'running';
+  } else if (player.isPlayerAlive) {
+    player.isPlayerAlive = false;
+  }
+
+  console.log('server isPA', player)
+
+  res.send(player.isPlayerAlive)
+});
+
 
 
 app.listen(port, () => console.log(`Werewolf server listening on port ${port}`))
+
+
+//TODO choose either 'user' or 'player' and only use one.

@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 
 const LobbyScreen = ({ players }) => {
   const [ statusInput, setStatusInput ] = useState('')
-  const { userId, gameId } = useContext(GameContext)
+  const { userId, gameId, startGame } = useContext(GameContext)
 
   const handleChange = (e) => {
     setStatusInput(e.target.value)
@@ -35,8 +35,6 @@ const LobbyScreen = ({ players }) => {
   }
 
   const classes = useStyles();
-
-  const {startGame} = useContext(GameContext)
 
   return (
     <Container>

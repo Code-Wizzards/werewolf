@@ -46,7 +46,7 @@ createNewGame = async () => {
     }
   }
   
-  startNewGame = () => {
+  startNewGame = () => { // TODO: do we need this?
     this.createNewGame()
     this.setState({newGameStarted: true })
   };
@@ -68,6 +68,13 @@ createNewGame = async () => {
     }, 1000)
   }
 
+  updateIsPlayerAlive = async () => {
+    console.log('updating is playeralive')
+    const status = await Server.updateIsPlayerAlive(this.state.gameId, this.state.userId)
+    this.setState({isPlayerAlive: status, gameStage: "running"})
+    setTimeout( () => { console.log(this.state.isPlayerAlive) }, 5000);
+  }
+
 
   state = {
     players: [],
@@ -75,6 +82,7 @@ createNewGame = async () => {
     userName:'',
     userId: '',
     userRole: '',
+    isPlayerAlive: null,
     gameStage: '',
     newGameStarted: false,
     createNewGame: this.createNewGame,
@@ -82,7 +90,8 @@ createNewGame = async () => {
     startNewGame: this.startNewGame,
     joinGame: this.joinGame,
     refresh: this.refresh,
-    startGame: this.startGame
+    startGame: this.startGame,
+    updateIsPlayerAlive: this.updateIsPlayerAlive
   }; 
   
   render() {
