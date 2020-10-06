@@ -3,12 +3,12 @@ import RoleText from "../Elements/roleText.js";
 import GameTime from "../Elements/gameTime.js";
 import UserAvatar from "../Elements/userAvatar.js";
 
-const Header = ({ role, username, avatar }) => {
+const Header = ({ userRole, username, avatar }) => {
   return (
     <div className="Header">
       <UserAvatar username={username} avatar={avatar} />
       <GameTime />
-      <RoleText role={role} />
+      <RoleText userRole={userRole} />
     </div>
   );
 };

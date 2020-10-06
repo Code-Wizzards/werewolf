@@ -1,7 +1,8 @@
 import React from "react";
 
-const RoleInfo = ({ role }) => {
-  if (role === "villager") {
+const RoleInfo = ({ userRole }) => {
+ 
+  if (userRole === "villager") {
     return (
       <p>
        Your village is under attack from Werewolves! Each day
@@ -13,7 +14,7 @@ const RoleInfo = ({ role }) => {
     );
   }
 
-  if (role === "werewolf") {
+  if (userRole === "werewolf") {
     return (
       <p>
         You appear human but you're really a blood-thirsty beast. You and your
@@ -27,7 +28,7 @@ const RoleInfo = ({ role }) => {
     )
   }
 
-  if (role === "seer") {
+  if (userRole === "seer") {
     return (
       <p>
        You are a villager with a special power: the ability to know the truth by moonlight.  
@@ -40,13 +41,18 @@ const RoleInfo = ({ role }) => {
     )
   }
 
-  if (role === "healer") {
+  if (userRole === "healer") {
     return (
       <p>
       You are a villager with a special power: the ability to bring someone back from the brink of death. 
       </p>
     )
   }
+    else {
+      return (
+        <p>Could not match role</p>
+      )
+    }
 
 }
 

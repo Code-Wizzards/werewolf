@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import Typography from '@material-ui/core/Typography';
 
-import { GameConsumer } from './gameManager/game-manager'
-import StartScreen from './Components/StartScreen'
-import LobbyScreen from './Components/LobbyScreen'
-import EnterNameForm from './Components/EnterNameForm';
-import Title from './Components/Title';
-import RoleCard from './Components/RoleCard/RoleCard';
-import DaytimeScreen from './Components/DaytimeScreen/DaytimeScreen';
+import { GameConsumer } from './game-manager'
+import StartScreen from '../Components/StartScreen'
+import LobbyScreen from '../Components/LobbyScreen'
+import EnterNameForm from '../Components/EnterNameForm';
+import Title from '../Components/Title';
+import RoleCard from '../Components/RoleCard/RoleCard';
+import DaytimeScreen from '../Components/DaytimeScreen/DaytimeScreen';
 
 export default class GameScreenManager extends Component {
   render() {
@@ -16,7 +16,7 @@ export default class GameScreenManager extends Component {
        <Title />
         <GameConsumer>
           {(gameState) => {
-          const { gameId, userName, gameStage, players, userRole, isPlayerAlive } = gameState;
+          const { gameId, userName, gameStage, players, userRole } = gameState;
           
           if (!gameId) {
               return (
@@ -35,12 +35,12 @@ export default class GameScreenManager extends Component {
             }
             if (gameStage === 'role assignment') {
               return (
-                <RoleCard role={userRole} />
+                <RoleCard userRole={userRole} />
               )
             }
             if (gameStage === 'running') {
               return (
-                <DaytimeScreen />
+                <DaytimeScreen userRole={userRole} userName={userName} />
               )
             }
           }}

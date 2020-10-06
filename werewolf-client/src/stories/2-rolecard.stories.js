@@ -12,24 +12,24 @@ export default {
 
 // export const Emoji = () => (
 //   <Button onClick={action('clicked')}>
-//     <span role="img" aria-label="so cool">
+//     <span userRole="img" aria-label="so cool">
 //       😀 😎 👍 💯
 //     </span>
 //   </Button>
 // );
 
 export const roleCardWolf = () => (
-  <RoleCard role={"werewolf"} />
+  <RoleCard userRole={"werewolf"} />
 )
 
 export const roleCardVillager = () => (
-  <RoleCard role={"villager"} />
+  <RoleCard userRole={"villager"} />
 )
 
 export const roleCardHealer = () => (
-  <RoleCard role={"healer"} />
+  <RoleCard userRole={"healer"} />
 )
 
 export const roleCardSeer = () => (
-  <RoleCard role={"seer"} />
+  <RoleCard userRole={"seer"} />
 )

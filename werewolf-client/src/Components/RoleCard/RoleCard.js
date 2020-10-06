@@ -1,15 +1,16 @@
 import React, {useContext } from "react";
-import { GameContext } from '../../gameManager/game-manager'
-import RoleInfo from "./RoleInfo";
-import RoleImage from "./RoleImage";
+import { GameContext } from '../../gameManagers/game-manager'
+import RoleInfo from "./Elements/RoleInfo";
+import RoleImage from "./Elements/RoleImage";
 import { Button } from '@material-ui/core';
 import './RoleCard.css';
 
-const RoleCard = ({ role }) => {
-  const { updateIsPlayerAlive } = useContext(GameContext)
+const RoleCard = ({ userRole }) => {
+
+  const { updateIsPlayerAlive,  gameStage } = useContext(GameContext)
   
   let color;
-  switch (role) {
+  switch (userRole) {
     case "villager":
       color = "#177173";
       break;
@@ -38,12 +39,13 @@ const RoleCard = ({ role }) => {
   return (
     <div className="rolecard-container">
     <div className="RoleCard">
-      <h1 style={{color: color}}>{role}</h1>
-      <RoleImage role={role} />
-      <RoleInfo role={role} />
+      <h1 style={{color: color}}>{userRole}</h1>
+      <RoleImage userRole={userRole} />
+      <RoleInfo userRole={userRole} />
       </div>
       <Button onClick={updateIsPlayerAlive} color="primary" variant="contained" align="center">Ready!</Button>
-    </div>
+      {gameStage !== "running" ? <p class="info">Waiting for all players to click ready</p> : ""}
+   </div>
   );
 };
 

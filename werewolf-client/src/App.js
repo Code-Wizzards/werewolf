@@ -1,8 +1,8 @@
 import React from 'react';
 
-import GameScreenManager from './GameScreenManager'
+import GameScreenManager from './gameManagers/GameScreenManager'
 import './CSS/App.css';
-import { GameProvider } from './gameManager/game-manager'
+import { GameProvider } from './gameManagers/game-manager'
 
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';

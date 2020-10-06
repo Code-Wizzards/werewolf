@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { GameContext } from '../../../gameManager/game-manager'
+import { GameContext } from '../../../gameManagers/game-manager'
 // import * as Server from '../../../RestServer';
 import PlayerListItem from "../Elements/playerListItem";
 

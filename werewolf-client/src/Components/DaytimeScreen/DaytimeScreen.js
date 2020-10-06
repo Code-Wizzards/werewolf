@@ -4,12 +4,12 @@ import Header from "./Containers/Header.js";
 import GameZone from "./Containers/GameZone";
 import GameLog from "./Containers/GameLog";
 
-export default function DaytimeScreen() {
+export default function DaytimeScreen({ userRole, userName }) {
   return (
     <div className="daytime-screen">
       <Header
-        role="werewolf"
-        username="Randy"
+        userRole={userRole}
+        username={userName}
         avatar="https://via.placeholder.com/150x120"
       />
       <GameZone />
@@ -17,3 +17,6 @@ export default function DaytimeScreen() {
     </div>
   );
 }
+
+
+// to do :  hook up with user details

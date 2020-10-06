@@ -1,5 +1,5 @@
 import React, {useContext, useState, Keyboard} from 'react';
-import { GameContext } from '../gameManager/game-manager'
+import { GameContext } from '../gameManagers/game-manager'
 import { makeStyles } from '@material-ui/core/styles';
 import PlayerList from './PlayerList'
 import { Container, Box, Button, TextField, Paper, LinearProgress, Typography } from '@material-ui/core';

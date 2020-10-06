@@ -27,10 +27,18 @@ const players = [
 
 export function joinGame(gameId){ //TODO: this should call out to the server to see if that game exists or not
   console.log('rs-joingame', gameId)
-  return {
-    gameId,
-    state: "lobby",
-    players: getPlayers(gameId)
+
+  const checkGame = fetchGameState(gameId);
+  if (checkGame) {
+    return {
+      gameId,
+      stage: "lobby",
+      players: getPlayers(gameId)
+    }
+  } else {
+   
+     
+    
   }
 }
 

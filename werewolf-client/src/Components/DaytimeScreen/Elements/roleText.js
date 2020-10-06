@@ -1,9 +1,9 @@
 import React from "react";
 
-const RoleText = ({ role }) => {
+const RoleText = ({ userRole }) => {
   let colour;
 
-  switch (role) {
+  switch (userRole) {
     case "villager":
       colour = "#177173";
       break;
@@ -36,7 +36,7 @@ const RoleText = ({ role }) => {
         color: "white"
       }}
     >
-      {role}
+      {userRole}
     </p>
   );
 };

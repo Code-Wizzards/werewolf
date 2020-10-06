@@ -4,7 +4,7 @@ import { Container, Box, TextField } from '@material-ui/core';
 import { Button } from '@material-ui/core';
 import { spacing } from '@material-ui/system';
 
-import { GameContext } from '../gameManager/game-manager'
+import { GameContext } from '../gameManagers/game-manager'
 
 const EnterNameForm = () => {
   const {addUser} = useContext(GameContext)

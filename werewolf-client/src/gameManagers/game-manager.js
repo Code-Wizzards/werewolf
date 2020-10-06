@@ -35,8 +35,7 @@ createNewGame = async () => {
   };
 
   joinGame = (gameId) => {
-    console.log('joining game:')
-    try {
+   try {
       const gameState = Server.joinGame(gameId)
       this.setState({gameId: gameState.gameId})
       this.setState({players: gameState.players})
@@ -53,14 +52,14 @@ createNewGame = async () => {
 
   startGame = async () => {
    const userRole = await Server.startGame(this.state.gameId, this.state.userId)
-   this.setState({userRole: userRole, gameStage: "role assignment"})
+   this.setState({userRole: userRole})
   }
 
   refresh = (gameId) => {
     setInterval(async () => {
       try {
         const gameState = await Server.fetchGameState(gameId)
-        this.setState({players: gameState.players})
+        this.setState({players: gameState.players, gameStage: gameState.stage})
       }
       catch(error) {
         console.log('Error refreshing gameState:', error)
@@ -71,8 +70,8 @@ createNewGame = async () => {
   updateIsPlayerAlive = async () => {
     console.log('updating is playeralive')
     const status = await Server.updateIsPlayerAlive(this.state.gameId, this.state.userId)
-    this.setState({isPlayerAlive: status, gameStage: "running"})
-    setTimeout( () => { console.log(this.state.isPlayerAlive) }, 5000);
+    this.setState({isPlayerAlive: status})
+    // setTimeout( () => { console.log(this.state.isPlayerAlive) }, 5000);
   }
 
 
@@ -81,7 +80,7 @@ createNewGame = async () => {
     gameId: '',
     userName:'',
     userId: '',
-    userRole: '',
+    userRole: 'no role',
     isPlayerAlive: null,
     gameStage: '',
     newGameStarted: false,

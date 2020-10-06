@@ -77,6 +77,31 @@ function getUniqueRandomNumber(max, arrayToCheck) {
   return newNumber;
 }
 
+function getPlayer (playerId, game) {
+  const player =  game.players.filter(player => player.id == playerId)[0]
+  if (!player) {
+    throw new Error(`player with id ${playerId} not found in game ${JSON.stringify(game)}`)
+  }
+  return player
+}
+
+function updateGameStage(gameId, newStage) {
+  const game = selectGame(gameId);
+  game.stage = newStage;
+}
+
+function areAllPlayersReady(gameId) {
+  const game = selectGame(gameId);
+  const players = game.players;
+  const readyPlayers = players.filter(player => player.isPlayerAlive === true);
+  if (players.length === readyPlayers.length) {
+    updateGameStage(gameId, "running")
+  }
+  console.log('players', players)
+  console.log('readyPlayers', readyPlayers)
+  console.log('game.stage', game.stage)
+}
+
 app.get('/getPlayers', (req, res) => { //TODO: dont think this is needed
   console.log('sending players', players)
   res.send(players)
@@ -87,7 +112,7 @@ app.get('/game/:gameId/getGameState', (req, res) => {
   const requestedGame = selectGame(gameId)
   if (!requestedGame) {
     console.log(`client requested game ${gameId} doesn't exist`)
-    res.sendStatus(400)
+    res.sendStatus(404)
   } else {
     res.send(requestedGame)
   }
@@ -109,13 +134,7 @@ app.post('/game/:gameId/registerUser', (req, res) => {
   res.send(200, newUser)
 })
 
-function getPlayer (playerId, game) {
-  const player =  game.players.filter(player => player.id == playerId)[0]
-  if (!player) {
-    throw new Error(`player with id ${playerId} not found in game ${JSON.stringify(game)}`)
-  }
-  return player
-}
+
 
 app.post('/game/:gameId/player/:playerId/setStatus', (req, res) => {
   try {
@@ -158,32 +177,32 @@ app.get('/game/:gameId/user/:userId/startGame',  (req, res) => {
     return
   }
 
-  game.players = assignRoles(game.players)
-  game.stage = 'role assignment'
+  game.players = assignRoles(game.players);
+  game.stage = 'role assignment';
 
-  const userRole = selectUser(userId, gameId).role
-  console.log(userRole)
-  res.send(userRole)
+  const userRole = selectUser(userId, gameId).role;
+  console.log(userRole);
+  res.send(userRole);
 });
 
 
 app.post(`/game/:gameId/user/:userId/updateIsPlayerAlive`, (req, res) => {
   console.log('server- updating isplayeralive')
-  const gameId = req.params.gameId
-  const game = selectGame(gameId)
-  const playerId = req.params.userId
-  const player = getPlayer(playerId, game)
+  const gameId = req.params.gameId;
+  const game = selectGame(gameId);
+  const playerId = req.params.userId;
+  const player = getPlayer(playerId, game);
 
   if (!player.isPlayerAlive) {
    player.isPlayerAlive = true;
-   game.stage = 'running';
+   areAllPlayersReady(gameId)
   } else if (player.isPlayerAlive) {
     player.isPlayerAlive = false;
   }
 
   console.log('server isPA', player)
 
-  res.send(player.isPlayerAlive)
+  res.send(player.isPlayerAlive);
 });
 
 
