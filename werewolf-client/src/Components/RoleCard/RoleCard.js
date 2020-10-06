@@ -7,7 +7,7 @@ import './RoleCard.css';
 
 const RoleCard = ({ userRole }) => {
 
-  const { updateIsPlayerAlive,  gameStage } = useContext(GameContext)
+  const { updateIsPlayerAlive,  gameStage, isPlayerAlive } = useContext(GameContext)
   
   let color;
   switch (userRole) {
@@ -43,7 +43,7 @@ const RoleCard = ({ userRole }) => {
       <RoleImage userRole={userRole} />
       <RoleInfo userRole={userRole} />
       </div>
-      <Button onClick={updateIsPlayerAlive} color="primary" variant="contained" align="center">Ready!</Button>
+      <Button onClick={updateIsPlayerAlive} disabled={isPlayerAlive} color="primary" variant="contained" align="center">Ready!</Button>
       {gameStage !== "running" ? <p class="info">Waiting for all players to click ready</p> : ""}
    </div>
   );
