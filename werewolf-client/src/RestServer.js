@@ -117,11 +117,17 @@ export function simulateUsersJoining() {
 
 
 export async function startGame(gameId, userId) {
- const  userRole  = await getFromServer(`/game/${gameId}/user/${userId}/startGame`)
- return userRole
+ const  userRole  = await getFromServer(`/game/${gameId}/user/${userId}/startGame`);
+ return userRole;
 }
 
 export async function updateIsPlayerAlive(gameId, userId) {
- const isPlayerAlive = await sendToServer(`/game/${gameId}/user/${userId}/updateIsPlayerAlive`)
-  return isPlayerAlive
+ const isPlayerAlive = await sendToServer(`/game/${gameId}/user/${userId}/updateIsPlayerAlive`);
+  return isPlayerAlive;
+ }
+
+ export function playerAccused(gameId, buttonId) {
+  console.log('rest server, playeraccused', buttonId, '- button id')
+  const data = {buttonId}
+  sendToServer(`/game/${gameId}/playerAccused`, data);
  }

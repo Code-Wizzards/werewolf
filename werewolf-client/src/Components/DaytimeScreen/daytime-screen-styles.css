@@ -73,7 +73,7 @@ text-transform: uppercase;
   justify-self: start;
   height: 30px;
   width: 80px;
-  background-color: #df1623;
+  /* background-color: #df1623; */
   border: none;
   border-radius: 5px;
   font-size: 0.8rem;

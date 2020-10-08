@@ -68,12 +68,15 @@ createNewGame = async () => {
   }
 
   updateIsPlayerAlive = async () => {
-    console.log('updating is playeralive')
     const status = await Server.updateIsPlayerAlive(this.state.gameId, this.state.userId)
     this.setState({isPlayerAlive: status})
     // setTimeout( () => { console.log(this.state.isPlayerAlive) }, 5000);
   }
 
+  playerAccused = (buttonId) => {
+       console.log('GM,playeraccused called');
+       Server.playerAccused(this.state.gameId, buttonId);
+  }
 
   state = {
     players: [],
@@ -82,6 +85,7 @@ createNewGame = async () => {
     userId: '',
     userRole: 'no role',
     isPlayerAlive: null,
+    accused: null,
     gameStage: '',
     newGameStarted: false,
     createNewGame: this.createNewGame,
@@ -90,7 +94,8 @@ createNewGame = async () => {
     joinGame: this.joinGame,
     refresh: this.refresh,
     startGame: this.startGame,
-    updateIsPlayerAlive: this.updateIsPlayerAlive
+    updateIsPlayerAlive: this.updateIsPlayerAlive,
+    playerAccused: this.playerAccused
   }; 
   
   render() {

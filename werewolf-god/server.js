@@ -102,6 +102,10 @@ function areAllPlayersReady(gameId) {
   console.log('game.stage', game.stage)
 }
 
+
+
+
+
 app.get('/getPlayers', (req, res) => { //TODO: dont think this is needed
   console.log('sending players', players)
   res.send(players)
@@ -195,7 +199,8 @@ app.post(`/game/:gameId/user/:userId/updateIsPlayerAlive`, (req, res) => {
 
   if (!player.isPlayerAlive) {
    player.isPlayerAlive = true;
-   areAllPlayersReady(gameId)
+  //  areAllPlayersReady(gameId) // use this for actual game play
+   updateGameStage(gameId, "running") // use this while testing to not have to make all players ready
   } else if (player.isPlayerAlive) {
     player.isPlayerAlive = false;
   }
@@ -204,6 +209,24 @@ app.post(`/game/:gameId/user/:userId/updateIsPlayerAlive`, (req, res) => {
 
   res.send(player.isPlayerAlive);
 });
+
+
+app.post('/game/:gameId/playerAccused', (req, res) => {
+  const game = selectGame(req.params.gameId);
+  const playerId  = req.body.data.buttonId;
+  const player = getPlayer(playerId, game);
+  
+  player.accused = true;
+  
+  const accusedPlayers = game.players.filter(player => player.accused === true);
+  game.accusedPlayers = accusedPlayers;
+  console.log('game playeraccused l-221', game)
+  res.send(accusedPlayers)
+})
+
+
+
+// to do - error handling!
 
 
 
