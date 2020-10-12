@@ -8,7 +8,7 @@ const AccuseButton = (props) => {
   const accusedPlayers = players.filter(player => player.accused);
   let buttonText; 
   let color;
-    if (accusedPlayers.filter(player => player.id === id)[0]){
+    if (accusedPlayers.filter(player => player.id === id)[0]) {
       buttonText = "second";
       color = "#16A9DF";
     } else {

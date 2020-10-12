@@ -56,13 +56,19 @@ const games = [
 function selectGame(gameId) {
   const gameArr = games.filter((game) => game.id == gameId);
   const [selectedGame] = gameArr;
+  if (!selectedGame) {
+    throw new Error (`No game with ${gameId} found in gameArr ${games}`)
+  }
   return selectedGame;
 }
 
 function selectUser(userId, gameId) {
   const game = selectGame(gameId)
   const userArr = game.players.filter((user => user.id == userId))
-  const [user] = userArr
+  const [user] = userArr;
+  if (!user) {
+    throw new Error (`No user with userId ${userId} found in game ${gameId}`)
+  }
   return user;
 }
 
@@ -125,7 +131,11 @@ app.get('/game/:gameId/getGameState', (req, res) => {
 app.post('/game/:gameId/registerUser', (req, res) => {
   const gameId = req.params.gameId
   console.log('post register user', gameId)
-  const requestedUserName = req.body.data
+  const requestedUserName = req.body.data.requestedUserName;
+  if(!requestedUserName) {
+    return res.sendStatus(400)
+  }
+
   const newUser = {
     id: getUniqueRandomNumber(1199,
       games.map(game => game.players).map(player => player.id)),
@@ -211,17 +221,17 @@ app.post(`/game/:gameId/user/:userId/updateIsPlayerAlive`, (req, res) => {
 });
 
 
-app.post('/game/:gameId/playerAccused', (req, res) => {
-  const game = selectGame(req.params.gameId);
-  const playerId  = req.body.data.buttonId;
-  const player = getPlayer(playerId, game);
-  
-  player.accused = true;
-  
-  const accusedPlayers = game.players.filter(player => player.accused === true);
-  game.accusedPlayers = accusedPlayers;
-  console.log('game playeraccused l-221', game)
-  res.send(accusedPlayers)
+app.post('/game/:gameId/player/:playerId/playerAccused', (req, res) => {   // send player ID in params
+  try {
+    const game = selectGame(req.params.gameId);    
+    const playerId  = req.params.playerId; // change bttonid
+    const player = getPlayer(playerId, game);
+    player.accused = true; 
+     res.send(200);
+  } catch(err) {
+    console.error('error accusing player', err)
+    res.send(500) 
+  } 
 })
 
 

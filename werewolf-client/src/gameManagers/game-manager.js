@@ -73,9 +73,8 @@ createNewGame = async () => {
     // setTimeout( () => { console.log(this.state.isPlayerAlive) }, 5000);
   }
 
-  playerAccused = (buttonId) => {
-       console.log('GM,playeraccused called');
-       Server.playerAccused(this.state.gameId, buttonId);
+  playerAccused = (accuseButtonId) => {
+    Server.playerAccused(this.state.gameId, accuseButtonId);
   }
 
   state = {

@@ -64,8 +64,8 @@ async function sendToServer(path, data) {
 } 
 
 export function registerUser(requestedName, gameId) {
-  console.log('registeruser,rest', gameId);
-  const newUser = sendToServer(`/game/${gameId}/registerUser`, requestedName);
+  const newUser = sendToServer(`/game/${gameId}/registerUser`, {requestedName});
+  console.log('registeruser', newUser)
   return newUser;
 }
 
@@ -126,8 +126,6 @@ export async function updateIsPlayerAlive(gameId, userId) {
   return isPlayerAlive;
  }
 
- export function playerAccused(gameId, buttonId) {
-  console.log('rest server, playeraccused', buttonId, '- button id')
-  const data = {buttonId}
-  sendToServer(`/game/${gameId}/playerAccused`, data);
+ export function playerAccused(gameId, playerId) {
+  sendToServer(`/game/${gameId}/player/${playerId}/playerAccused`);
  }

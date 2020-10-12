@@ -8,22 +8,28 @@ import { GameContext } from '../gameManagers/game-manager'
 
 const EnterNameForm = () => {
   const {addUser} = useContext(GameContext)
-  const [input, setInput] = useState(0);
+  const [input, setInput] = useState('');
+  const [enterNameError, setEnterNameError] = useState(false)
 
   const handleChange = (e) => {
     setInput(e.target.value);
   }
 
   const handleClick = () => {
-    console.log('add user click', input);
+   
+       if (input === '') {
+      return setEnterNameError(true)
+    } 
     addUser(input)
+    setEnterNameError(false)
   }
 
   return (
     <Container>
       <Box p={3}>
-        <TextField id="name-input" label="Enter Your Name" variant="outlined" onChange={ handleChange } />
-      </Box>
+        <TextField  error={enterNameError}
+        helperText={enterNameError ? 'Please enter a name' : ' '} id="name-input" label="Enter Your Name" variant="outlined" onChange={ handleChange } />
+      </Box> 
       <Box p={1} display="flex" justifyContent="center" alignItems="center">
         <Button color="primary" variant="contained" align="center" onClick={ handleClick }>
           Start
