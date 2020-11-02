@@ -26,8 +26,6 @@ const players = [
 // }
 
 export function joinGame(gameId){ //TODO: this should call out to the server to see if that game exists or not
-  console.log('rs-joingame', gameId)
-
   const checkGame = fetchGameState(gameId);
   if (checkGame) {
     return {
@@ -117,8 +115,12 @@ export function simulateUsersJoining() {
 
 
 export async function startGame(gameId, userId) {
- const  userRole  = await getFromServer(`/game/${gameId}/user/${userId}/startGame`);
- return userRole;
+ try {
+   const  userRole  = await getFromServer(`/game/${gameId}/user/${userId}/startGame`);
+   return userRole;
+ } catch(err) {
+    alert(err.response.data)
+ }
 }
 
 export async function updateIsPlayerAlive(gameId, userId) {

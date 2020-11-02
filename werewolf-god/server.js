@@ -129,22 +129,20 @@ app.get('/game/:gameId/getGameState', (req, res) => {
 })
 
 app.post('/game/:gameId/registerUser', (req, res) => {
-  const gameId = req.params.gameId
-  console.log('post register user', gameId)
-  const requestedUserName = req.body.data.requestedUserName;
-  if(!requestedUserName) {
+  const gameId = req.params.gameId;
+  const requestedName = req.body.data.requestedName;
+  if(!requestedName) {
     return res.sendStatus(400)
   }
 
   const newUser = {
     id: getUniqueRandomNumber(1199,
       games.map(game => game.players).map(player => player.id)),
-    name: requestedUserName
+    name: requestedName
   }
 
   const thisGame = selectGame(gameId)
   thisGame.players.push(newUser)
-  console.log('newUser in post', newUser)
   res.send(200, newUser)
 })
 
@@ -187,7 +185,7 @@ app.get('/game/:gameId/user/:userId/startGame',  (req, res) => {
   }
 
   if (game.players.length < 7) {
-    res.send(400, 'Must have at least 7 players to start a game')
+    res.status(400).send('You must have at least 7 players to start the game');
     return
   }
 
@@ -195,7 +193,7 @@ app.get('/game/:gameId/user/:userId/startGame',  (req, res) => {
   game.stage = 'role assignment';
 
   const userRole = selectUser(userId, gameId).role;
-  console.log(userRole);
+  console.log('players after role assignment', game.players);
   res.send(userRole);
 });
 

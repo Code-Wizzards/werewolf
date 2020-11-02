@@ -18,7 +18,6 @@ export const GameContext = createContext({
 export class GameProvider extends React.Component {
   
   addUser = async (newUserName) => {
-    console.log('players is', this.state.players)
     const gameId = this.state.gameId
     const userDetails = await Server.registerUser(newUserName, gameId)
     this.setState({ userName: userDetails.name, 
