@@ -50,8 +50,7 @@ createNewGame = async () => {
   };
 
   startGame = async () => {
-   const userRole = await Server.startGame(this.state.gameId, this.state.userId)
-   this.setState({userRole: userRole})
+    Server.startGame(this.state.gameId, this.state.userId)
   }
 
   refresh = (gameId) => {
@@ -59,6 +58,9 @@ createNewGame = async () => {
       try {
         const gameState = await Server.fetchGameState(gameId)
         this.setState({players: gameState.players, gameStage: gameState.stage})
+        if (this.state.gameStage === "role assignment") {
+           this.getRole()
+        }
       }
       catch(error) {
         console.log('Error refreshing gameState:', error)
@@ -76,12 +78,19 @@ createNewGame = async () => {
     Server.playerAccused(this.state.gameId, accuseButtonId);
   }
 
+  getRole = () => {
+     console.log('getRole')
+     const thisPlayer = this.state.players.find(player => player.id === this.state.userId);
+     console.log({thisPlayer})
+     this.setState({userRole: thisPlayer.role});
+  }
+
   state = {
     players: [],
     gameId: '',
     userName:'',
     userId: '',
-    userRole: 'no role',
+    userRole: '',
     isPlayerAlive: null,
     accused: null,
     gameStage: '',
@@ -93,7 +102,8 @@ createNewGame = async () => {
     refresh: this.refresh,
     startGame: this.startGame,
     updateIsPlayerAlive: this.updateIsPlayerAlive,
-    playerAccused: this.playerAccused
+    playerAccused: this.playerAccused,
+    getRole: this.getRole
   }; 
   
   render() {

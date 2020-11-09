@@ -103,17 +103,14 @@ function areAllPlayersReady(gameId) {
   if (players.length === readyPlayers.length) {
     updateGameStage(gameId, "running")
   }
-  console.log('players', players)
-  console.log('readyPlayers', readyPlayers)
-  console.log('game.stage', game.stage)
+//   console.log('players', players)
+//   console.log('readyPlayers', readyPlayers)
+//   console.log('game.stage', game.stage)
 }
 
 
-
-
-
 app.get('/getPlayers', (req, res) => { //TODO: dont think this is needed
-  console.log('sending players', players)
+//   console.log('sending players', players)
   res.send(players)
 })
 
@@ -194,7 +191,7 @@ app.get('/game/:gameId/user/:userId/startGame',  (req, res) => {
 
   const userRole = selectUser(userId, gameId).role;
   console.log('players after role assignment', game.players);
-  res.send(userRole);
+//   res.send(userRole);
 });
 
 
@@ -231,6 +228,8 @@ app.post('/game/:gameId/player/:playerId/playerAccused', (req, res) => {   // se
     res.send(500) 
   } 
 })
+
+
 
 
 

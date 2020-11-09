@@ -17,7 +17,7 @@ export default class GameScreenManager extends Component {
         <GameConsumer>
           {(gameState) => {
           const { gameId, userName, gameStage, players, userRole } = gameState;
-          
+       
           if (!gameId) {
               return (
                 <StartScreen />
@@ -35,6 +35,7 @@ export default class GameScreenManager extends Component {
             }
             if (gameStage === 'role assignment') {
               return (
+                 
                 <RoleCard userRole={userRole} />
               )
             }

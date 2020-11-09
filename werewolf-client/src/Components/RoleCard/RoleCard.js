@@ -5,10 +5,12 @@ import RoleImage from "./Elements/RoleImage";
 import { Button } from '@material-ui/core';
 import './RoleCard.css';
 
-const RoleCard = ({ userRole }) => {
+const RoleCard = () => {
 
-  const { updateIsPlayerAlive,  gameStage, isPlayerAlive } = useContext(GameContext)
-  
+
+  const { updateIsPlayerAlive,  gameStage, isPlayerAlive, userRole } = useContext(GameContext)
+
+ 
   let color;
   switch (userRole) {
     case "villager":
@@ -44,7 +46,7 @@ const RoleCard = ({ userRole }) => {
       <RoleInfo userRole={userRole} />
       </div>
       <Button onClick={updateIsPlayerAlive} disabled={isPlayerAlive} color="primary" variant="contained" align="center">Ready!</Button>
-      {gameStage !== "running" ? <p class="info">Waiting for all players to click ready</p> : ""}
+      {gameStage !== "running" ? <p className="info">Waiting for all players to click ready</p> : ""}
    </div>
   );
 };
