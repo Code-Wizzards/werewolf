@@ -7,9 +7,9 @@ This is a side / learning project and shuffling along at a casual pace!
 ***
 ## Technologies, Languages and Frameworks
 
-JavaScript & Express (back end)
-React (front end)
-Docker
+- JavaScript & Express (back end)
+- React (front end)
+- Docker
 
 ***
 ## Status
