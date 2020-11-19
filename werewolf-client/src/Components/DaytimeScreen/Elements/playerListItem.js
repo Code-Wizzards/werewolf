@@ -1,13 +1,12 @@
 import React from "react";
-import AccuseButton from "./accuseButton";
+
 
 
 const PlayerListItem = (props) => {
  
   return (
-    <div className="player-list-item">
+    <div>
       {props.playerName}
-    <AccuseButton id={props.id}/>
     </div>
    
   );

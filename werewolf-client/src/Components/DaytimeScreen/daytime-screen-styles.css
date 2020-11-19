@@ -81,3 +81,21 @@ text-transform: uppercase;
   text-transform: uppercase;
   place-self: center;
 }
+
+.voting-booth-wrap {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.vote-area {
+   width: 100%;
+   display: grid;
+   grid-template-columns: 50% 50%;
+   justify-items: center;
+   
+}
+
+.vote-area button {
+   max-width: 50%;
+}

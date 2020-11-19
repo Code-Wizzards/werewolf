@@ -2,7 +2,7 @@ import React, { createContext } from 'react';
 import * as Server from '../RestServer'
 
 export const GameContext = createContext({
-    userName:'',
+    username:'',
     userId:'',
     players: [],
     gameId: '',
@@ -17,10 +17,10 @@ export const GameContext = createContext({
 
 export class GameProvider extends React.Component {
   
-  addUser = async (newUserName) => {
+  addUser = async (newusername) => {
     const gameId = this.state.gameId
-    const userDetails = await Server.registerUser(newUserName, gameId)
-    this.setState({ userName: userDetails.name, 
+    const userDetails = await Server.registerUser(newusername, gameId)
+    this.setState({ username: userDetails.name, 
                     userId: userDetails.id,
                     gameStage: 'lobby'})
     console.log(this.state)
@@ -78,6 +78,10 @@ createNewGame = async () => {
     Server.playerAccused(this.state.gameId, accuseButtonId);
   }
 
+  playerSeconded = (accuseButtonId) => {
+     Server.playerSeconded(this.state.gameId, accuseButtonId);
+  }
+
   getRole = () => {
      console.log('getRole')
      const thisPlayer = this.state.players.find(player => player.id === this.state.userId);
@@ -88,7 +92,7 @@ createNewGame = async () => {
   state = {
     players: [],
     gameId: '',
-    userName:'',
+    username:'',
     userId: '',
     userRole: '',
     isPlayerAlive: null,
@@ -103,6 +107,7 @@ createNewGame = async () => {
     startGame: this.startGame,
     updateIsPlayerAlive: this.updateIsPlayerAlive,
     playerAccused: this.playerAccused,
+    playerSeconded: this.playerSeconded,
     getRole: this.getRole
   }; 
   

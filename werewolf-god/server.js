@@ -210,30 +210,38 @@ app.post(`/game/:gameId/user/:userId/updateIsPlayerAlive`, (req, res) => {
     player.isPlayerAlive = false;
   }
 
-  console.log('server isPA', player)
-
   res.send(player.isPlayerAlive);
 });
 
 
-app.post('/game/:gameId/player/:playerId/playerAccused', (req, res) => {   // send player ID in params
+app.post('/game/:gameId/player/:playerId/playerAccused', (req, res) => {   
   try {
     const game = selectGame(req.params.gameId);    
-    const playerId  = req.params.playerId; // change bttonid
+    const playerId  = req.params.playerId; 
     const player = getPlayer(playerId, game);
     player.accused = true; 
      res.send(200);
   } catch(err) {
-    console.error('error accusing player', err)
-    res.send(500) 
+    console.error('error accusing player', err);
+    res.send(500);
   } 
-})
+});
+
+app.post('/game/:gameId/player/:playerId/playerSeconded', (req, res) => {   
+   try {
+     const game = selectGame(req.params.gameId);    
+     const playerId  = req.params.playerId; 
+     const player = getPlayer(playerId, game);
+     player.seconded = true; 
+     game.stage = "voting";
+      res.send(200);
+   } catch(err) {
+     console.error('error seconding player', err);
+     res.send(500);
+   } 
+ });
 
 
-
-
-
-// to do - error handling!
 
 
 

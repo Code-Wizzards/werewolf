@@ -16,14 +16,14 @@ export default class GameScreenManager extends Component {
        <Title />
         <GameConsumer>
           {(gameState) => {
-          const { gameId, userName, gameStage, players, userRole } = gameState;
+          const { gameId, username, gameStage, players, userRole } = gameState;
        
           if (!gameId) {
               return (
                 <StartScreen />
               )
             }
-            if (!userName) {
+            if (!username) {
               return (
                 <EnterNameForm />
               )
@@ -39,9 +39,9 @@ export default class GameScreenManager extends Component {
                 <RoleCard userRole={userRole} />
               )
             }
-            if (gameStage === 'running') {
+            if (gameStage === 'running' || gameStage === 'voting') {
               return (
-                <DaytimeScreen userRole={userRole} userName={userName} />
+                <DaytimeScreen userRole={userRole} username={username} />
               )
             }
           }}

@@ -19,7 +19,7 @@ export default {
 // );
 
 export const DaytimeScreenStory = () => (
-  <DaytimeScreen />
+  <DaytimeScreen username={'billy'} userRole={'werewolf'} />
 )
 
 

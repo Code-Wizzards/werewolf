@@ -45,7 +45,7 @@ const RoleCard = () => {
       <RoleImage userRole={userRole} />
       <RoleInfo userRole={userRole} />
       </div>
-      <Button onClick={updateIsPlayerAlive} disabled={isPlayerAlive} color="primary" variant="contained" align="center">Ready!</Button>
+      <Button onClick={() => updateIsPlayerAlive() } disabled={isPlayerAlive} color="primary" variant="contained" align="center">Ready!</Button>
       {gameStage !== "running" ? <p className="info">Waiting for all players to click ready</p> : ""}
    </div>
   );
