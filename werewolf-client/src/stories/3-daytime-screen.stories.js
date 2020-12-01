@@ -23,4 +23,3 @@ export const DaytimeScreenStory = () => (
 )
 
 
-// how to mimic useContext?

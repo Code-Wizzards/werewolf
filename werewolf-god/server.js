@@ -241,11 +241,20 @@ app.post('/game/:gameId/player/:playerId/playerSeconded', (req, res) => {
    } 
  });
 
+ app.post('/game/:gameId/player/:playerId/setVote', (req, res) => {   
+   const game = selectGame(req.params.gameId);    
+   const playerId  = req.params.playerId; 
+   const vote = req.body.data.vote;
+   const player = getPlayer(playerId, game);
+   player.voted = vote; 
+   res.send(200)
+ });
+
 
 
 
 
 app.listen(port, () => console.log(`Werewolf server listening on port ${port}`))
-
+  
 
 //TODO choose either 'user' or 'player' and only use one.

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext, createContext } from 'react';
+import WithContext from 'react-with-context';
 import { action } from '@storybook/addon-actions';
 import { Button } from '@storybook/react/demo';
 import RoleCard from '../Components/RoleCard/RoleCard';
@@ -18,18 +19,25 @@ export default {
 //   </Button>
 // );
 
-export const roleCardWolf = () => (
-  <RoleCard userRole={"werewolf"} />
-)
+// const { updateIsPlayerAlive,  gameStage, isPlayerAlive, userRole } = useContext(GameContext)
+
+// ?? how can we mock game context 
+
+export const roleCardWolf = () => {
+   const GameContext = {
+      userRole: 'werewolf'
+   }
+  return (<WithContext context={GameContext}><RoleCard /></WithContext>)
+}
 
 export const roleCardVillager = () => (
-  <RoleCard userRole={"villager"} />
+  <RoleCard />
 )
 
 export const roleCardHealer = () => (
-  <RoleCard userRole={"healer"} />
+  <RoleCard  />
 )
 
 export const roleCardSeer = () => (
-  <RoleCard userRole={"seer"} />
+  <RoleCard  />
 )

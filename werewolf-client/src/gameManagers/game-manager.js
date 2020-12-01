@@ -83,10 +83,14 @@ createNewGame = async () => {
   }
 
   getRole = () => {
-     console.log('getRole')
      const thisPlayer = this.state.players.find(player => player.id === this.state.userId);
      console.log({thisPlayer})
      this.setState({userRole: thisPlayer.role});
+  }
+
+  setVote = (vote) => {
+     console.log('settingvote')
+     Server.setVote(this.state.gameId, this.state.userId, vote)
   }
 
   state = {
@@ -108,7 +112,8 @@ createNewGame = async () => {
     updateIsPlayerAlive: this.updateIsPlayerAlive,
     playerAccused: this.playerAccused,
     playerSeconded: this.playerSeconded,
-    getRole: this.getRole
+    getRole: this.getRole,
+    setVote: this.setVote
   }; 
   
   render() {
