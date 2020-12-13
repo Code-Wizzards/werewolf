@@ -34,9 +34,7 @@ export function joinGame(gameId){ //TODO: this should call out to the server to 
       players: getPlayers(gameId)
     }
   } else {
-   
-     
-    
+   // ??
   }
 }
 
@@ -73,22 +71,22 @@ export async function createNewGame() {
 }
 
 async function getFromServer(path) {
-  const res = await axios(serverURL + path, {
-    method: 'GET',
-    mode: 'no-cors',
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json',
-    },
-    withCredentials: true,
-    credentials: 'same-origin',
-  })
-  if (res.status === 200) {
+   try{
+      const res = await axios(serverURL + path, {
+         method: 'GET',
+         mode: 'no-cors',
+         headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+         },
+         withCredentials: true,
+         credentials: 'same-origin',
+      })
     return res.data
-  } else {
-    throw new Error('Could not get game state from server: received status code' + res.status)
-  }
-} 
+   } catch (error) {
+         console.log(error.response.data)
+   } 
+}
 
 export async function getPlayers(gameId) {
   const players = getFromServer('/getPlayers')
@@ -97,7 +95,8 @@ export async function getPlayers(gameId) {
 
 export function fetchGameState(gameId) {
   const gameState = getFromServer(`/game/${gameId}/getGameState`) // rpoblem with referencing gameid sometimes its an object, other times not
-    return gameState
+  console.log('98, fetchgamestate, restserver', gameState) 
+  return gameState
 }
 
 export function simulateUsersJoining() {

@@ -15,12 +15,11 @@ const EnterNameForm = () => {
   }
 
   const handleClick = () => {
-   
-       if (input === '') {
+   if (input === '') {
       return setEnterNameError(true)
     } 
-    addUser(input)
-    setEnterNameError(false)
+   addUser(input)
+   setEnterNameError(false)
   }
 
   return (

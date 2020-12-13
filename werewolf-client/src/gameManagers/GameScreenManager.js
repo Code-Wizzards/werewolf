@@ -39,7 +39,7 @@ export default class GameScreenManager extends Component {
                 <RoleCard userRole={userRole} />
               )
             }
-            if (gameStage === 'running' || gameStage === 'voting') {
+            if (gameStage === 'running' || gameStage === 'voting' || gameStage === 'vote result') {
               return (
                 <DaytimeScreen userRole={userRole} username={username} />
               )

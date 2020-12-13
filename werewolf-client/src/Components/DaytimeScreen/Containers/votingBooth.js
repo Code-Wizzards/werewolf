@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
-import UserAvatar from './userAvatar';
+import UserAvatar from '../Elements/userAvatar';
 import { GameContext } from "../../../gameManagers/game-manager";
-import PlayerListItem from './playerListItem';
+import PlayerListItem from '../Elements/playerListItem';
 
 const VotingBooth = () => {
    const { players, setVote, userId } = useContext(GameContext);
-   const theAccused = players.find(player => player.seconded);
+   const theAccused = players.find(player => player.status === 'seconded');
+   const isThisPlayerTheAccused = theAccused.id === userId;
    
    const playersVotedKill = players.filter(player => player.voted === 'kill');
    const playersVotedKillList = playersVotedKill.map(player => 
@@ -34,8 +35,8 @@ const VotingBooth = () => {
       <div className='voting-booth-wrap'>
          <UserAvatar username={theAccused.name} avatar={"https://via.placeholder.com/150x120"} />
          <div className='vote-area'>
-            <button id='kill' onClick={ () => handleClick('kill')}>kill</button>
-            <button id='save' onClick={ () => handleClick('save')}>save</button>
+            <button id='kill' onClick={ () => handleClick('kill')} disabled={isThisPlayerTheAccused}>kill</button>
+            <button id='save' onClick={ () => handleClick('save')} disabled={isThisPlayerTheAccused}>save</button>
             <p className='kill vote-count' id='killCount'>{killCount}</p>
             <p className='save vote-count' id='saveCount'>{saveCount}</p>
             <div className="kill-list">

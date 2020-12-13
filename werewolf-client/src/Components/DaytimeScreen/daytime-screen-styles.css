@@ -99,3 +99,16 @@ text-transform: uppercase;
 .vote-area button {
    max-width: 50%;
 }
+
+.vote-result {
+   width: 100%;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   font-family: "Gloria Hallelujah", cursive;
+}
+
+.vote-result p {
+   font-style: italic;
+   font-size: 2rem;
+}

@@ -15,31 +15,31 @@ app.use(cors({ //TODO: this will not work when tha app is hosted online.
 const players = [ //TODO: not sure we use this but it may be useful to store all the users on the server, so we can assign ids better.
   {
     id: 100,
-    name: "chris Server"
+    name: 'chris Server'
   },
   {
     id: 200,
-    name: "lucy Server"
+    name: 'lucy Server'
   },
   {
     id: 300,
-    name: "anna Server"
+    name: 'anna Server'
   },
    {
     id: 400,
-    name: "duke"
+    name: 'duke'
   },
   {
     id: 500,
-    name: "billy"
+    name: 'billy'
   },
   {
     id: 600,
-    name: "lionel"
+    name: 'lionel'
   },
   {
   id: 700,
-  name: "talulah"
+  name: 'talulah'
   }
 ]
 
@@ -57,7 +57,7 @@ function selectGame(gameId) {
   const gameArr = games.filter((game) => game.id == gameId);
   const [selectedGame] = gameArr;
   if (!selectedGame) {
-    throw new Error (`No game with ${gameId} found in gameArr ${games}`)
+    console.error(`No game with id ${gameId} found in gameArr ${games}`)
   }
   return selectedGame;
 }
@@ -101,13 +101,47 @@ function areAllPlayersReady(gameId) {
   const players = game.players;
   const readyPlayers = players.filter(player => player.isPlayerAlive === true);
   if (players.length === readyPlayers.length) {
-    updateGameStage(gameId, "running")
+    updateGameStage(gameId, 'running')
   }
 //   console.log('players', players)
 //   console.log('readyPlayers', readyPlayers)
 //   console.log('game.stage', game.stage)
 }
 
+function haveAllPlayersVoted(game) {
+   const players = game.players;
+   const playersVoted = players.filter(player => player.voted);
+   if (players.length-1 === playersVoted.length) {
+      updateGameStage(game.id, 'vote result')
+      voteCount(game)
+   }
+}
+
+function voteCount(game) {
+   const players = game.players;
+   const killCount =  players.reduce((total, player) => {
+      if (player.voted === 'kill') { 
+         total++
+      }
+      return total;
+     }, 0)
+
+   const saveCount =  players.reduce((total, player) => {
+      if (player.voted === 'save') { 
+         total++
+      }
+      return total;
+      }, 0)
+
+   const theAccused = players.find(player => player.status === 'seconded');
+   if (killCount > saveCount) {
+      theAccused.status = 'killed';
+      theAccused.isPlayerAlive === false;
+   } else {
+      theAccused.status = 'saved'
+   }
+   console.log({ theAccused }, 'voteCount')
+}
 
 app.get('/getPlayers', (req, res) => { //TODO: dont think this is needed
 //   console.log('sending players', players)
@@ -118,8 +152,7 @@ app.get('/game/:gameId/getGameState', (req, res) => {
   const gameId = req.params.gameId
   const requestedGame = selectGame(gameId)
   if (!requestedGame) {
-    console.log(`client requested game ${gameId} doesn't exist`)
-    res.sendStatus(404)
+    res.status(404).send({ error: `client requested game ${gameId} doesn't exist` })
   } else {
     res.send(requestedGame)
   }
@@ -167,7 +200,7 @@ app.post('/createNewGame', (req, res) => {
       stage: 'lobby',
       players: []
     })
-  console.log('server.js, createnewgame,', games)
+//   console.log('server.js, createnewgame,', games)
   res.send({ gameId: newGameId })
 });
 
@@ -205,7 +238,7 @@ app.post(`/game/:gameId/user/:userId/updateIsPlayerAlive`, (req, res) => {
   if (!player.isPlayerAlive) {
    player.isPlayerAlive = true;
   //  areAllPlayersReady(gameId) // use this for actual game play
-   updateGameStage(gameId, "running") // use this while testing to not have to make all players ready
+   updateGameStage(gameId, 'running') // use this while testing to not have to make all players ready
   } else if (player.isPlayerAlive) {
     player.isPlayerAlive = false;
   }
@@ -219,7 +252,7 @@ app.post('/game/:gameId/player/:playerId/playerAccused', (req, res) => {
     const game = selectGame(req.params.gameId);    
     const playerId  = req.params.playerId; 
     const player = getPlayer(playerId, game);
-    player.accused = true; 
+    player.status = 'accused'; 
      res.send(200);
   } catch(err) {
     console.error('error accusing player', err);
@@ -232,8 +265,8 @@ app.post('/game/:gameId/player/:playerId/playerSeconded', (req, res) => {
      const game = selectGame(req.params.gameId);    
      const playerId  = req.params.playerId; 
      const player = getPlayer(playerId, game);
-     player.seconded = true; 
-     game.stage = "voting";
+     player.status = 'seconded'; 
+     game.stage = 'voting';
       res.send(200);
    } catch(err) {
      console.error('error seconding player', err);
@@ -243,11 +276,17 @@ app.post('/game/:gameId/player/:playerId/playerSeconded', (req, res) => {
 
  app.post('/game/:gameId/player/:playerId/setVote', (req, res) => {   
    const game = selectGame(req.params.gameId);    
-   const playerId  = req.params.playerId; 
-   const vote = req.body.data.vote;
-   const player = getPlayer(playerId, game);
-   player.voted = vote; 
-   res.send(200)
+   const playerId  = Number(req.params.playerId); 
+   const theAccused = game.players.find(player => player.status === 'seconded');
+   if(playerId === theAccused.id) {
+     return res.status(400).send({ error: 'Players cannot vote for themselves'})
+   } else {
+      const vote = req.body.data.vote;
+      const player = getPlayer(playerId, game);
+      player.voted = vote; 
+      haveAllPlayersVoted(game)
+      res.send(200)
+   }
  });
 
 
