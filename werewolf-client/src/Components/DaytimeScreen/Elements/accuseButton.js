@@ -5,7 +5,7 @@ import { GameContext } from '../../../gameManagers/game-manager';
 const AccuseButton = (props) => {
    const thisPlayerId = props.id;
    const { players, playerAccused, playerSeconded } = useContext(GameContext);
-   const accusedPlayersIds = players.filter(player => player.status === 'accused').map(player => player.id)
+   const accusedPlayersIds = players.filter(player => player.suspected === 'accused').map(player => player.id)
    const isThisPlayerAccused = accusedPlayersIds.includes(thisPlayerId)
    let color;
    let buttonText;

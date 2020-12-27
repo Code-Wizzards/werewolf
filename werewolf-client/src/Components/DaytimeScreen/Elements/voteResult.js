@@ -5,12 +5,12 @@ import { GameContext } from "../../../gameManagers/game-manager";
 
 const VoteResult = () => {
    const { players } = useContext(GameContext);
-   const theAccused = players.find(player => player.status)
+   const theAccused = players.find(player => player.suspected)
    return( 
       <div className="vote-result">
          <UserAvatar username={theAccused.name} avatar={"https://via.placeholder.com/150x120"}/>
          <p> has been... </p>
-         <h1> {theAccused.status} </h1> 
+         <h1> {theAccused.suspected} </h1> 
          <button>continue</button>
       </div>
    )

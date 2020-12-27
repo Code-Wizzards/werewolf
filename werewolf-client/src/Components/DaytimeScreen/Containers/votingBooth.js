@@ -5,7 +5,7 @@ import PlayerListItem from '../Elements/playerListItem';
 
 const VotingBooth = () => {
    const { players, setVote, userId } = useContext(GameContext);
-   const theAccused = players.find(player => player.status === 'seconded');
+   const theAccused = players.find(player => player.suspected === 'seconded');
    const isThisPlayerTheAccused = theAccused.id === userId;
    
    const playersVotedKill = players.filter(player => player.voted === 'kill');
@@ -24,7 +24,7 @@ const VotingBooth = () => {
    const handleClick = (vote) => {
     
       if (theAccused.id === userId) {
-         alert('you cannot vote when you are standing trial')
+         alert('you cannot vote for yourself')
       } else {
          setVote(vote)
       }

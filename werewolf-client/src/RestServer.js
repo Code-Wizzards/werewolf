@@ -128,11 +128,11 @@ export async function updateIsPlayerAlive(gameId, userId) {
  }
 
  export function playerAccused(gameId, playerId) {
-  sendToServer(`/game/${gameId}/player/${playerId}/playerAccused`);
+  sendToServer(`/game/${gameId}/player/${playerId}/playerSuspected`, { suspected: 'accused' });
  }
 
  export function playerSeconded(gameId, playerId) {
-   sendToServer(`/game/${gameId}/player/${playerId}/playerSeconded`);
+   sendToServer(`/game/${gameId}/player/${playerId}/playerSuspected`, { suspected: 'seconded' });
   }
 
   export function setVote(gameId, userId, vote ) {
