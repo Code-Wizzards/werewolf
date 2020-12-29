@@ -3,9 +3,6 @@ const { games } = require('../mock-database')
 function selectGame(gameId) {
    const gameArr = games.filter((game) => game.id == gameId);
    const [selectedGame] = gameArr;
-   if (!selectedGame) {
-     console.error(`No game with id ${gameId} found in gameArr ${games}`)
-   }
    return selectedGame;
  }
 

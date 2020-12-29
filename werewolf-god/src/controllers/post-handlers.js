@@ -22,7 +22,7 @@ const registerUser = (req, res) => {
  
    const thisGame = selectGame(gameId)
    thisGame.players.push(newUser)
-   res.send(200, newUser)
+   res.status(200).send(newUser)
 }
 
 const createNewGame = (req, res) => {
@@ -77,7 +77,7 @@ const setVote = (req, res) => {
       const player = getPlayer(playerId, game);
       player.voted = vote; 
       haveAllPlayersVoted(game)
-      res.send(200)
+      res.sendStatus(200)
    }
  }
 
@@ -90,10 +90,10 @@ const updatePlayerSuspected = (req, res) => {
       if (player.suspected === 'seconded') {
         game.stage = 'voting';
       }
-     res.send(200);
+     res.sendStatus(200);
    } catch(err) {
       console.error('error updating player.suspected', err);
-      res.send(500);
+      res.sendStatus(500);
     } 
 }
 

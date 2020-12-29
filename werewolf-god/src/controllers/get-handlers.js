@@ -6,7 +6,7 @@ const getGameState = (req, res) => {
    if (!requestedGame) {
      res.status(404).send({ error: `client requested game ${gameId} doesn't exist` })
    } else {
-     res.send(requestedGame)
+     res.status(200).send(requestedGame)
    }
  }
 
@@ -18,19 +18,20 @@ const getGameState = (req, res) => {
    if (!game.stage === 'lobby') {
      res.sendStatus(400)
      return
+   
    }
  
    if (game.players.length < 7) {
-     res.status(400).send('You must have at least 7 players to start the game');
+     res.status(400).send({ error: 'You must have at least 7 players to start the game' });
      return
    }
  
    game.players = assignRoles(game.players);
    game.stage = 'role assignment';
  
-   const userRole = selectUser(userId, gameId).role;
+   // const userRole = selectUser(userId, gameId).role;
    console.log('players after role assignment', game.players);
- //   res.send(userRole);
+   res.sendStatus(200)
  }
 
 
