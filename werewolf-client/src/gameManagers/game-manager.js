@@ -17,6 +17,15 @@ export const GameContext = createContext({
 
 export class GameProvider extends React.Component {
   
+   addError = (error) => {
+     this.setState({ errors: [...this.state.errors, error]})
+     setTimeout(() => this.state.removeError(), 10000)  
+   }
+
+  removeError = () => {
+     this.setState({ errors: this.state.errors.slice(1)})
+  }
+
   addUser = async (newusername) => {
     const gameId = this.state.gameId
     const userDetails = await Server.registerUser(newusername, gameId)
@@ -26,31 +35,39 @@ export class GameProvider extends React.Component {
     console.log(this.state)
   };
 
-createNewGame = async () => {
-    const gameIdObj  = await Server.createNewGame();
-    const gameId = gameIdObj.gameId  // grab id from object so can pass down just the number, not an object
-    this.setState({ gameId: gameId})
-    this.refresh(gameId)
+   createNewGame = async () => {
+      const gameIdObj  = await Server.createNewGame();
+      const gameId = gameIdObj.gameId  // grab id from object so can pass down just the number, not an object
+      this.setState({ gameId: gameId})
+      this.refresh(gameId)
   };
 
-  joinGame = (gameId) => {
-   try {
-      const gameState = Server.joinGame(gameId)
-      this.setState({gameId: gameState.gameId})
-      this.setState({players: gameState.players})
-      this.refresh(gameState.gameId)
-    } catch (err) {
-      alert(err)
-    }
+   joinGame = async (gameId) => {
+      try {
+         const gameState = await Server.joinGame(gameId)
+         if (gameState.error) {
+            this.state.addError(gameState.error)
+         } else {
+            this.setState({gameId: gameState.gameId})
+            this.setState({players: gameState.players})
+            this.refresh(gameState.gameId)
+         }
+      } catch (err) {
+         alert(err)
+      }
   }
   
-  startNewGame = () => { // TODO: do we need this?
+  startNewGame = () => { 
     this.createNewGame()
     this.setState({newGameStarted: true })
   };
 
   startGame = async () => {
-    Server.startGame(this.state.gameId, this.state.userId)
+    const res = await Server.startGame(this.state.gameId, this.state.userId)
+      if (res.error) {
+          alert(res.error)
+       }
+    
   }
 
   refresh = (gameId) => {
@@ -93,7 +110,10 @@ createNewGame = async () => {
      Server.setVote(this.state.gameId, this.state.userId, vote)
   }
 
+  
+
   state = {
+    errors: [],
     players: [],
     gameId: '',
     username:'',
@@ -113,7 +133,9 @@ createNewGame = async () => {
     playerAccused: this.playerAccused,
     playerSeconded: this.playerSeconded,
     getRole: this.getRole,
-    setVote: this.setVote
+    setVote: this.setVote,
+    addError: this.addError,
+    removeError: this.removeError
   }; 
   
   render() {

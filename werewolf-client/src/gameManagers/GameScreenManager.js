@@ -15,9 +15,24 @@ export default class GameScreenManager extends Component {
       <div>
        <Title />
         <GameConsumer>
+         {({ errors }) => {
+            if (errors.length) {
+              let errorMessages = [];
+               for (let i = 0; i < errors.length; i++) {
+                 errorMessages.push(<p key={i}>{errors[i].message}</p>)
+               }
+              return(
+                <div id="errors">
+                {errorMessages}
+                </div>
+              )  
+            }
+        }}
+         </GameConsumer> 
+         <GameConsumer>
           {(gameState) => {
           const { gameId, username, gameStage, players, userRole } = gameState;
-       
+          
           if (!gameId) {
               return (
                 <StartScreen />

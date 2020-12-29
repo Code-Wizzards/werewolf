@@ -6,15 +6,15 @@ const serverURL = process.env.NODE_ENV === 'production' ? `http://${hostURL}/api
 const players = [
   {
     id:1,
-    name: "chris"
+    name: 'chris'
   },
   {
     id:2,
-    name: "lucy"
+    name: 'lucy'
   },
   {
     id:3,
-    name: "anna"
+    name: 'anna'
   }
 ]
 
@@ -25,16 +25,22 @@ const players = [
 //   }
 // }
 
-export function joinGame(gameId){ //TODO: this should call out to the server to see if that game exists or not
-  const checkGame = fetchGameState(gameId);
-  if (checkGame) {
+export async function joinGame(gameId){ //TODO: this should call out to the server to see if that game exists or not
+  const checkGame = await fetchGameState(gameId);
+  if (checkGame.error) {
     return {
+       error: { message: `Game with id ${gameId} not found`}
+    } 
+  } else if (checkGame.stage !== 'lobby') {
+      return {
+         error: { message: `Sorry, you can't join a game that's already running` }
+      }
+  } else {
+   return {
       gameId,
-      stage: "lobby",
+      stage: 'lobby',
       players: getPlayers(gameId)
     }
-  } else {
-   // ??
   }
 }
 
@@ -85,7 +91,8 @@ async function getFromServer(path) {
     return res.data
    } catch (error) {
          console.log(error.response.data)
-   } 
+         return error.response.data
+    } 
 }
 
 export async function getPlayers(gameId) {
@@ -93,9 +100,8 @@ export async function getPlayers(gameId) {
   return players
 }
 
-export function fetchGameState(gameId) {
-  const gameState = getFromServer(`/game/${gameId}/getGameState`) // rpoblem with referencing gameid sometimes its an object, other times not
-  console.log('98, fetchgamestate, restserver', gameState) 
+export async function fetchGameState(gameId) {
+  const gameState = await getFromServer(`/game/${gameId}/getGameState`) // rpoblem with referencing gameid sometimes its an object, other times not
   return gameState
 }
 
@@ -114,12 +120,8 @@ export function simulateUsersJoining() {
 
 
 export async function startGame(gameId, userId) {
- try {
-   const  userRole  = await getFromServer(`/game/${gameId}/user/${userId}/startGame`);
-   return userRole;
- } catch(err) {
-    alert(err.response.data)
- }
+  const res =  await getFromServer(`/game/${gameId}/user/${userId}/startGame`)
+  return res
 }
 
 export async function updateIsPlayerAlive(gameId, userId) {
