@@ -18,6 +18,7 @@ services:
   werewolf-client:
     container_name: werewolf-client
     hostname: werewolf-client
+    build: ./werewolf-client
     image: codewizzards/werewolf-client 
     expose:
       - "80"
@@ -27,6 +28,7 @@ services:
   werewolf-server:
     container_name: werewolf-server
     hostname: werewolf-server
+    build: ./werewolf-god
     image: codewizzards/werewolf-god 
     expose:
       - "3000"
