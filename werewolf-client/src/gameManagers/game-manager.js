@@ -19,7 +19,7 @@ export class GameProvider extends React.Component {
   
    addError = (error) => {
      this.setState({ errors: [...this.state.errors, error]})
-     setTimeout(() => this.state.removeError(), 10000)  
+     setTimeout(() => this.state.removeError(), 5000)  
    }
 
   removeError = () => {
@@ -101,16 +101,16 @@ export class GameProvider extends React.Component {
 
   getRole = () => {
      const thisPlayer = this.state.players.find(player => player.id === this.state.userId);
-     console.log({thisPlayer})
      this.setState({userRole: thisPlayer.role});
   }
 
   setVote = (vote) => {
-     console.log('settingvote')
-     Server.setVote(this.state.gameId, this.state.userId, vote)
+    Server.setVote(this.state.gameId, this.state.userId, vote)
   }
 
-  
+  sunset = async () => {
+    await Server.sunset(this.state.gameId)
+  }
 
   state = {
     errors: [],
@@ -135,7 +135,8 @@ export class GameProvider extends React.Component {
     getRole: this.getRole,
     setVote: this.setVote,
     addError: this.addError,
-    removeError: this.removeError
+    removeError: this.removeError,
+    sunset: this.sunset
   }; 
   
   render() {

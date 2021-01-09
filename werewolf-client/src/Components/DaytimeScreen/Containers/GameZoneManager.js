@@ -2,14 +2,14 @@ import React, { useContext } from "react";
 import GameZonePlayerList from "../Elements/gameZonePlayerList";
 import { GameContext } from "../../../gameManagers/game-manager";
 import VotingBooth from "./votingBooth";
-import VoteResult from "../Elements/voteResult";
+import VoteResult from "./voteResult";
 
 // import * as Server from '../../../RestServer';
 
 
 const GameZone = () => {
    const { gameStage } = useContext(GameContext)
-   if (gameStage === 'running') {
+   if (gameStage === 'running-day' || gameStage === 'running-night') {
       return (
          <div className="game-zone">
             <h1> the village </h1>
@@ -29,8 +29,8 @@ const GameZone = () => {
    if(gameStage === "vote result") {
       return(
          <div className="game-zone">
-         <h1> votes are in </h1>
-         <VoteResult />
+          <h1> votes are in </h1>
+          <VoteResult />
          </div>
       )
    }

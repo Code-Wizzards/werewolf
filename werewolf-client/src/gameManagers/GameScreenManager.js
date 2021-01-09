@@ -1,18 +1,27 @@
-import React, { Component } from 'react'
+import React, { Component, useContext } from 'react'
 import Typography from '@material-ui/core/Typography';
-
-import { GameConsumer } from './game-manager'
+import '../CSS/App.css'
+import { GameConsumer, GameContext } from './game-manager'
 import StartScreen from '../Components/StartScreen'
 import LobbyScreen from '../Components/LobbyScreen'
 import EnterNameForm from '../Components/EnterNameForm';
 import Title from '../Components/Title';
 import RoleCard from '../Components/RoleCard/RoleCard';
-import DaytimeScreen from '../Components/DaytimeScreen/DaytimeScreen';
+import GamePlayScreen from '../Components/DaytimeScreen/GamePlayScreen';
+import { withTheme } from '@material-ui/core';
 
-export default class GameScreenManager extends Component {
-  render() {
+export default function GameScreenManager() {
+  const { gameStage } =  useContext(GameContext)
+  const bgcolor = gameStage === 'running-night' ? '#040139' : '#fafafa'
+  const fontColor = gameStage === 'running-night' ? 'white' : 'black'
+  const styles = {
+    backgroundColor: `${bgcolor}`, 
+    color: `${fontColor}`,
+    padding: '30px'
+  }
+
     return (
-      <div>
+      <div style={styles}>
        <Title />
         <GameConsumer>
          {({ errors }) => {
@@ -54,16 +63,17 @@ export default class GameScreenManager extends Component {
                 <RoleCard userRole={userRole} />
               )
             }
-            if (gameStage === 'running' || gameStage === 'voting' || gameStage === 'vote result') {
+            const GamePlayScreenStages = ['running-day', 'running-night', 'voting', 'vote result']
+            if (GamePlayScreenStages.includes(gameStage)) {
               return (
-                <DaytimeScreen userRole={userRole} username={username} />
+                <GamePlayScreen userRole={userRole} username={username} />
               )
             }
           }}
         </GameConsumer>
       </div>
     )
-  }
+  
 }
 
 

@@ -9,17 +9,8 @@ export default {
   component: RoleCard,
 };
 
-// export const Text = () => <Button onClick={action('clicked')}>Hello Button</Button>;
 
-// export const Emoji = () => (
-//   <Button onClick={action('clicked')}>
-//     <span userRole="img" aria-label="so cool">
-//       😀 😎 👍 💯
-//     </span>
-//   </Button>
-// );
-
-// const { updateIsPlayerAlive,  gameStage, isPlayerAlive, userRole } = useContext(GameContext)
+const { updateIsPlayerAlive,  gameStage, isPlayerAlive, userRole } = useContext(GameContext)
 
 // ?? how can we mock game context 
 

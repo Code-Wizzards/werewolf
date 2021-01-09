@@ -139,5 +139,8 @@ export async function updateIsPlayerAlive(gameId, userId) {
 
   export function setVote(gameId, userId, vote ) {
      sendToServer(`/game/${gameId}/player/${userId}/setVote`, {vote})
-     console.log('sending to server', { vote })
+  }
+
+  export function sunset(gameId) {
+    sendToServer(`/game/${gameId}/sunset`)
   }

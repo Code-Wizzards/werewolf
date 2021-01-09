@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import UserAvatar from '../Elements/userAvatar';
 import { GameContext } from "../../../gameManagers/game-manager";
 import PlayerListItem from '../Elements/playerListItem';
+import { Button } from '@material-ui/core';
 
 const VotingBooth = () => {
    const { players, setVote, userId } = useContext(GameContext);
@@ -35,8 +36,8 @@ const VotingBooth = () => {
       <div className='voting-booth-wrap'>
          <UserAvatar username={theAccused.name} avatar={"https://via.placeholder.com/150x120"} />
          <div className='vote-area'>
-            <button id='kill' onClick={ () => handleClick('kill')} disabled={isThisPlayerTheAccused}>kill</button>
-            <button id='save' onClick={ () => handleClick('save')} disabled={isThisPlayerTheAccused}>save</button>
+            <Button id='kill' onClick={ () => handleClick('kill')} disabled={isThisPlayerTheAccused} color="secondary" variant="contained" align="center" size="small">kill</Button>
+            <Button id='save' onClick={ () => handleClick('save')} disabled={isThisPlayerTheAccused} color="primary" variant="contained" align="center" size="small">save</Button>
             <p className='kill vote-count' id='killCount'>{killCount}</p>
             <p className='save vote-count' id='saveCount'>{saveCount}</p>
             <div className="kill-list">

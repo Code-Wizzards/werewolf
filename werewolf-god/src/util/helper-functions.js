@@ -3,6 +3,9 @@ const { games } = require('../mock-database')
 function selectGame(gameId) {
    const gameArr = games.filter((game) => game.id == gameId);
    const [selectedGame] = gameArr;
+   if(!selectedGame) {
+     throw new Error(`No game with id ${gameId} found`)
+   }
    return selectedGame;
  }
 
@@ -51,7 +54,7 @@ function selectGame(gameId) {
    })
  }
  
- function updateGameStage(gameId, newStage) {
+ function changeGameStage(gameId, newStage) {
    const game = selectGame(gameId);
    game.stage = newStage;
  }
@@ -61,7 +64,7 @@ function selectGame(gameId) {
    const players = game.players;
    const readyPlayers = players.filter(player => player.isPlayerAlive === true);
    if (players.length === readyPlayers.length) {
-     updateGameStage(gameId, 'running')
+     changeGameStage(gameId, 'running-day')
    }
  }
  
@@ -69,7 +72,7 @@ function selectGame(gameId) {
     const players = game.players;
     const playersVoted = players.filter(player => player.voted);
     if (players.length-1 === playersVoted.length) {
-       updateGameStage(game.id, 'vote result')
+       changeGameStage(game.id, 'vote result')
        voteCount(game)
     }
  }
@@ -106,7 +109,7 @@ function selectGame(gameId) {
     getUniqueRandomNumber,
     getPlayer,
     assignRoles,
-    updateGameStage,
+    changeGameStage,
     areAllPlayersReady,
     haveAllPlayersVoted,
     voteCount

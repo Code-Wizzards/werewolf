@@ -1,9 +1,14 @@
-.daytime-screen {
+.game-play-screen {
   display: grid;
   grid-template-rows: repeat(3, auto);
   grid-gap: 30px;
   justify-items: center;
   margin-top: 30px;
+}
+
+.night-screen {
+  background-color: #040139;
+  color: white;
 }
 
 .Header {
@@ -29,6 +34,7 @@
   margin-top: 16px;
   height: auto;
   width: 160px;
+  font-size: 1rem;
 }
 
 .game-zone,
@@ -110,5 +116,9 @@ text-transform: uppercase;
 
 .vote-result p {
    font-style: italic;
-   font-size: 2rem;
+   font-size: 1.3rem;
+}
+
+.vote-result h1 {
+  font-size: 2.5rem;
 }

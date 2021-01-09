@@ -1,9 +1,13 @@
 import './Title.css';
-import React from 'react';
+import React, { useContext } from 'react';
+import { GameContext } from '../gameManagers/game-manager'
 
 const Title =() => {
+  
   return (
-    <h1 className="Title">werewolf</h1>
+    <div className='title'>
+     <h1>werewolf</h1>
+    </div>
   )
 }
 
