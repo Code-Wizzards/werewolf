@@ -1,4 +1,4 @@
-const players = [  //TODO: not sure we use this but it may be useful to store all the users on the server, so we can assign ids better.
+export const players = [  
   {
     id: 100,
     name: 'chris',
@@ -35,14 +35,3 @@ const players = [  //TODO: not sure we use this but it may be useful to store al
     role: 'villager'
   }
 ]
- 
- // created to push a new game into for create new game process.
- const games = [
-   {
-     id: 123,
-     stage: 'lobby',
-     players
-   }
- ]
-
- module.exports = { games }

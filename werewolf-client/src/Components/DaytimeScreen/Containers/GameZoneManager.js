@@ -7,13 +7,13 @@ import VoteResult from "./voteResult";
 // import * as Server from '../../../RestServer';
 
 
-const GameZone = () => {
-   const { gameStage } = useContext(GameContext)
+const GameZone = ({ gameStage, players, userRole }) => {
+  
    if (gameStage === 'running-day' || gameStage === 'running-night') {
       return (
          <div className="game-zone">
             <h1> the village </h1>
-            <GameZonePlayerList />
+            <GameZonePlayerList players={players} userRole={userRole} gameStage={gameStage} />
          </div>
       );
    }

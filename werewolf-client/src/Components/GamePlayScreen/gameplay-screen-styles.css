@@ -78,8 +78,7 @@ text-transform: uppercase;
 .player-list-item > button {
   justify-self: start;
   height: 30px;
-  width: 80px;
-  /* background-color: #df1623; */
+  min-width: 80px;
   border: none;
   border-radius: 5px;
   font-size: 0.8rem;
@@ -103,7 +102,7 @@ text-transform: uppercase;
 }
 
 .vote-area button {
-   max-width: 50%;
+   min-width: 50%;
 }
 
 .vote-result {

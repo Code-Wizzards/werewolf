@@ -7,10 +7,11 @@ import LobbyScreen from '../Components/LobbyScreen'
 import EnterNameForm from '../Components/EnterNameForm';
 import Title from '../Components/Title';
 import RoleCard from '../Components/RoleCard/RoleCard';
-import GamePlayScreen from '../Components/DaytimeScreen/GamePlayScreen';
+import GamePlayScreen from '../Components/GamePlayScreen/GamePlayScreen';
 import { withTheme } from '@material-ui/core';
 
 export default function GameScreenManager() {
+  
   const { gameStage } =  useContext(GameContext)
   const bgcolor = gameStage === 'running-night' ? '#040139' : '#fafafa'
   const fontColor = gameStage === 'running-night' ? 'white' : 'black'
@@ -66,7 +67,7 @@ export default function GameScreenManager() {
             const GamePlayScreenStages = ['running-day', 'running-night', 'voting', 'vote result']
             if (GamePlayScreenStages.includes(gameStage)) {
               return (
-                <GamePlayScreen userRole={userRole} username={username} />
+                <GamePlayScreen userRole={userRole} username={username} gameStage={gameStage} players={players} />
               )
             }
           }}

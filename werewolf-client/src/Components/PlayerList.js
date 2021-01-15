@@ -31,18 +31,20 @@ export default function PlayerList({ players }) {
   )
 }
 
+// got rid of key warnings but surely must be a better way
+
 const PlayerRow = (player, classes) => {
   const avatarNumber = Math.floor(player.id/100) +1
   const playerAvatarFile = `/Avatars/a${avatarNumber}.png`
   return (
-    <Container>
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar classes={{img: classes.imageSize}} variant="square" alt={player.name} src={playerAvatarFile}/>
+    <Container key={player.id+500}>
+      <ListItem key={player.id+600}>
+        <ListItemAvatar key={player.id+700}>
+          <Avatar key={avatarNumber} classes={{img: classes.imageSize}} variant="square" alt={player.name} src={playerAvatarFile}/>
         </ListItemAvatar>
-        <ListItemText id={player.id}
+        <ListItemText id={player.id} key={player.id}
           primary={
-            <React.Fragment>
+            <React.Fragment key={player.id+800}>
               <Typography
                 component="span"
                 variant="body2"

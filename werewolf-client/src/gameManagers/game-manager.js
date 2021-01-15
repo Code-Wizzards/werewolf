@@ -112,6 +112,17 @@ export class GameProvider extends React.Component {
     await Server.sunset(this.state.gameId)
   }
 
+  isPlayerWerewolf = async (playerId) => {
+    const answer = await Server.isPlayerWerewolf(this.state.gameId, playerId)
+    console.log('isPlayerWerewolf GM', {answer})
+    return answer
+  }
+
+  healPlayer = async (playerId) => {
+    const result = await Server.healPlayer(this.state.gameId, playerId)
+    return result
+  }
+
   state = {
     errors: [],
     players: [],
@@ -136,8 +147,10 @@ export class GameProvider extends React.Component {
     setVote: this.setVote,
     addError: this.addError,
     removeError: this.removeError,
-    sunset: this.sunset
-  }; 
+    sunset: this.sunset,
+    isPlayerWerewolf: this.isPlayerWerewolf,
+    healPlayer: this.healPlayer
+  }
   
   render() {
     return (

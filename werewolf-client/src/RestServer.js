@@ -39,7 +39,7 @@ export async function joinGame(gameId){ //TODO: this should call out to the serv
    return {
       gameId,
       stage: 'lobby',
-      players: getPlayers(gameId)
+     
     }
   }
 }
@@ -95,10 +95,10 @@ async function getFromServer(path) {
     } 
 }
 
-export async function getPlayers(gameId) {
-  const players = getFromServer('/getPlayers')
-  return players
-}
+// export async function getPlayers(gameId) {
+//   const players = getFromServer('/getPlayers')
+//   return players
+// }
 
 export async function fetchGameState(gameId) {
   const gameState = await getFromServer(`/game/${gameId}/getGameState`) // rpoblem with referencing gameid sometimes its an object, other times not
@@ -143,4 +143,14 @@ export async function updateIsPlayerAlive(gameId, userId) {
 
   export function sunset(gameId) {
     sendToServer(`/game/${gameId}/sunset`)
+  }
+
+  export async function isPlayerWerewolf(gameId, playerId) {
+   const answer =  await getFromServer(`/game/${gameId}/player/${playerId}/isPlayerWerewolf`)
+   return answer
+  }
+
+  export async function healPlayer(gameId, playerId) {
+    const result = await sendToServer(`/game/${gameId}/player/${playerId}/healPlayer`)
+    return result
   }

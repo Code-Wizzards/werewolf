@@ -11,7 +11,9 @@ const { getGameState,
         updateIsPlayerAlive,
         setVote,
         updatePlayerSuspected,
-        sunset
+        sunset,
+        isPlayerWerewolf,
+        healPlayer
       } = require('./controllers/game')
 
 const app = express().use(bodyParser.json())
@@ -39,6 +41,10 @@ app.post('/game/:gameId/player/:playerId/playerSuspected', updatePlayerSuspected
 app.post('/game/:gameId/player/:playerId/setVote', setVote);
 
 app.post('/game/:gameId/sunset', sunset)
+
+app.get('/game/:gameId/player/:playerId/isPlayerWerewolf', isPlayerWerewolf)
+
+app.post('/game/:gameId/player/:playerId/healPlayer', healPlayer)
 
 module.exports = app
   

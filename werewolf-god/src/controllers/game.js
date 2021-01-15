@@ -135,16 +135,32 @@ const sunset = (req, res) => {
   res.sendStatus(200)
 }
 
+const isPlayerWerewolf = (req, res) => {
+  const game = selectGame(req.params.gameId)
+  const id = parseInt(req.params.playerId, 10)
+  const requestedPlayer = game.players.find(player => player.id === id)
+  const answer = requestedPlayer.role === 'werewolf'
+  res.status(200).json({answer})
+}
 
+const healPlayer = (req, res) => {
+  const game = selectGame(req.params.gameId)
+  const id = parseInt(req.params.playerId, 10)
+  const playerToHeal =  game.players.find(player => player.id === id)
+  playerToHeal.protected = true
+  res.status(200).json({ playerToHeal })
+}
 
 module.exports = {
-registerUser,
-setStatus,
-updateIsPlayerAlive,
-setVote,
-updatePlayerSuspected,
-getGameState,
-startGame,
-sunset
+  registerUser,
+  setStatus,
+  updateIsPlayerAlive,
+  setVote,
+  updatePlayerSuspected,
+  getGameState,
+  startGame,
+  sunset,
+  isPlayerWerewolf,
+  healPlayer
 }
 
