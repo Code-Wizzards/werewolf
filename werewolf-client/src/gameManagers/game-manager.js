@@ -115,12 +115,12 @@ export class GameProvider extends React.Component {
   isPlayerWerewolf = async (playerId) => {
     const answer = await Server.isPlayerWerewolf(this.state.gameId, playerId)
     console.log('isPlayerWerewolf GM', {answer})
-    return answer
+    return answer.body.message
   }
 
   healPlayer = async (playerId) => {
-    const result = await Server.healPlayer(this.state.gameId, playerId)
-    return result
+    const response = await Server.healPlayer(this.state.gameId, playerId)
+    return response.body.answer
   }
 
   state = {

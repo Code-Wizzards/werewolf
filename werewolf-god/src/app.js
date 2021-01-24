@@ -15,6 +15,8 @@ const { getGameState,
         isPlayerWerewolf,
         healPlayer
       } = require('./controllers/game')
+      
+const { setRoles } = require('./controllers/devHelpers')
 
 const app = express().use(bodyParser.json())
 
@@ -45,6 +47,8 @@ app.post('/game/:gameId/sunset', sunset)
 app.get('/game/:gameId/player/:playerId/isPlayerWerewolf', isPlayerWerewolf)
 
 app.post('/game/:gameId/player/:playerId/healPlayer', healPlayer)
+
+app.post('/game/:gameId/setRoles', setRoles)
 
 module.exports = app
   

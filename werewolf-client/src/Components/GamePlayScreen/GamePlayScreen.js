@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import "./gameplay-screen-styles.css";
-import Header from "../DaytimeScreen/Containers/Header.js";
-import GameZone from "../DaytimeScreen/Containers/GameZoneManager";
-import GameLog from "../DaytimeScreen/Containers/GameLog";
+import Header from "./Containers/Header.js";
+import GameZone from "./Containers/GameZoneManager";
+import GameLog from "./Containers/GameLog";
 
 
 export default function GamePlayScreen({ userRole, username, gameStage, players }) {

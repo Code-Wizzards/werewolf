@@ -140,7 +140,8 @@ const isPlayerWerewolf = (req, res) => {
   const id = parseInt(req.params.playerId, 10)
   const requestedPlayer = game.players.find(player => player.id === id)
   const answer = requestedPlayer.role === 'werewolf'
-  res.status(200).json({answer})
+  console.log('isPlayerWerewolf, controller, l143', {answer})
+  res.status(200).json(answer)
 }
 
 const healPlayer = (req, res) => {
@@ -148,7 +149,7 @@ const healPlayer = (req, res) => {
   const id = parseInt(req.params.playerId, 10)
   const playerToHeal =  game.players.find(player => player.id === id)
   playerToHeal.protected = true
-  res.status(200).json({ playerToHeal })
+  res.status(200)
 }
 
 module.exports = {
