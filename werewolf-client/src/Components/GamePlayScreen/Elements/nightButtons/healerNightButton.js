@@ -10,17 +10,12 @@ const HealerNightButton = ({id}) => {
 
   async function handleClick() {
     console.log('healer clicked at night')
-    const result = await healPlayer(id)
-    console.log(result)
-    if (result.status === 200) {
-      playerIsHealed()
-    }
+    console.log(healPlayer)
+    const playerIsHealed = await healPlayer(id)
+    console.log(playerIsHealed)
+    let buttonText = playerIsHealed ? 'Healed' : 'Heal'
+    setButtonText(buttonText)
   }
-
-  function playerIsHealed() {
-    setButtonText('healed')
-  }
-
  
   return (
     <button 

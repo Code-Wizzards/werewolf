@@ -30,7 +30,9 @@ async function sendToServer(path, data) {
     withCredentials: true,
     credentials: 'same-origin',
   })
-  // console.log('received from server', res.data)
+  if (res.status > 300) {
+    throw new Error('Error sending to server, received code:', res.status)
+  }
   return res.data // need to return something so can send something
 } 
 

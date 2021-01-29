@@ -31,6 +31,10 @@ const NightButton = ({playerRole, id}) => {
     )
   }
 
+  return (
+    <button>No role</button>
+  )
+
 
  
 }

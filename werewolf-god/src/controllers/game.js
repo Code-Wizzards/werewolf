@@ -147,7 +147,7 @@ const healPlayer = (req, res) => {
   const id = parseInt(req.params.playerId, 10)
   const playerToHeal = game.players.find(player => player.id === id)
   playerToHeal.protected = true
-  res.status(200)
+  res.sendStatus(200)
 }
 
 module.exports = {
