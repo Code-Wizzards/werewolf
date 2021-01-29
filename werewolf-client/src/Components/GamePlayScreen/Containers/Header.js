@@ -1,14 +1,14 @@
 import React from "react";
 import RoleText from "../Elements/roleText.js";
 import GameTime from "../Elements/gameTime.js";
-import UserAvatar from "../Elements/userAvatar.js";
+import PlayerAvatar from "../Elements/playerAvatar.js";
 
-const Header = ({ userRole, username, avatar }) => {
+const Header = ({ playerRole, playerName, avatar }) => {
   return (
     <div className="Header">
-      <UserAvatar username={username} avatar={avatar} />
+      <PlayerAvatar playerName={playerName} avatar={avatar} />
       <GameTime />
-      <RoleText userRole={userRole} />
+      <RoleText playerRole={playerRole} />
     </div>
   );
 };

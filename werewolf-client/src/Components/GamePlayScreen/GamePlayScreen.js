@@ -5,16 +5,16 @@ import GameZone from "./Containers/GameZoneManager";
 import GameLog from "./Containers/GameLog";
 
 
-export default function GamePlayScreen({ userRole, username, gameStage, players }) {
+export default function GamePlayScreen({ playerRole, playerName, gameStage, players }) {
 
   return (
     <div className={`game-play-screen ${gameStage === 'running-night' ? 'night-screen' : ''}`}>
       <Header
-        userRole={userRole}
-        username={username}
+        playerRole={playerRole}
+        playerName={playerName}
         avatar="https://via.placeholder.com/150x120"
       />
-      <GameZone gameStage={gameStage} players={players} userRole={userRole} />
+      <GameZone gameStage={gameStage} players={players} playerRole={playerRole} />
       <GameLog />
     </div>
   );

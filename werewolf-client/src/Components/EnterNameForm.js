@@ -6,7 +6,7 @@ import { Button } from '@material-ui/core';
 import { GameContext } from '../gameManagers/game-manager'
 
 const EnterNameForm = () => {
-  const {addUser} = useContext(GameContext)
+  const {addPlayer} = useContext(GameContext)
   const [input, setInput] = useState('');
   const [enterNameError, setEnterNameError] = useState(false)
 
@@ -18,7 +18,7 @@ const EnterNameForm = () => {
    if (input === '') {
       return setEnterNameError(true)
     } 
-   addUser(input)
+   addPlayer(input)
    setEnterNameError(false)
   }
 

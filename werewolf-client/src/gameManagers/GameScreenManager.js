@@ -41,14 +41,14 @@ export default function GameScreenManager() {
          </GameConsumer> 
          <GameConsumer>
           {(gameState) => {
-          const { gameId, username, gameStage, players, userRole } = gameState;
+          const { gameId, playerName, gameStage, players, playerRole } = gameState;
           
           if (!gameId) {
               return (
                 <StartScreen />
               )
             }
-            if (!username) {
+            if (!playerName) {
               return (
                 <EnterNameForm />
               )
@@ -61,13 +61,13 @@ export default function GameScreenManager() {
             if (gameStage === 'role assignment') {
               return (
                  
-                <RoleCard userRole={userRole} />
+                <RoleCard playerRole={playerRole} />
               )
             }
             const GamePlayScreenStages = ['running-day', 'running-night', 'voting', 'vote result']
             if (GamePlayScreenStages.includes(gameStage)) {
               return (
-                <GamePlayScreen userRole={userRole} username={username} gameStage={gameStage} players={players} />
+                <GamePlayScreen playerRole={playerRole} playerName={playerName} gameStage={gameStage} players={players} />
               )
             }
           }}

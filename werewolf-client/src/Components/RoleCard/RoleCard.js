@@ -8,11 +8,11 @@ import './RoleCard.css';
 const RoleCard = () => {
 
 
-  const { updateIsPlayerAlive,  gameStage, isPlayerAlive, userRole } = useContext(GameContext)
+  const { updateIsPlayerAlive,  gameStage, isPlayerAlive, playerRole } = useContext(GameContext)
 
  
   let color;
-  switch (userRole) {
+  switch (playerRole) {
     case "villager":
       color = "#177173";
       break;
@@ -41,9 +41,9 @@ const RoleCard = () => {
   return (
     <div className="rolecard-container">
     <div className="RoleCard">
-      <h1 style={{color: color}}>{userRole}</h1>
-      <RoleImage userRole={userRole} />
-      <RoleInfo userRole={userRole} />
+      <h1 style={{color: color}}>{playerRole}</h1>
+      <RoleImage playerRole={playerRole} />
+      <RoleInfo playerRole={playerRole} />
       </div>
       <Button onClick={() => updateIsPlayerAlive() } disabled={isPlayerAlive} color="primary" variant="contained" align="center">Ready!</Button>
       {gameStage !== "running" ? <p className="info">Waiting for all players to click ready</p> : ""}

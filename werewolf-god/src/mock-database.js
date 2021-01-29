@@ -1,4 +1,4 @@
-const players = [  //TODO: not sure we use this but it may be useful to store all the users on the server, so we can assign ids better.
+const players = [  
   {
     id: 100,
     name: 'chris',
@@ -46,3 +46,19 @@ const players = [  //TODO: not sure we use this but it may be useful to store al
  ]
 
  module.exports = { games }
+
+
+ /* 
+  Player object
+  Properties
+    id | integer
+    name | string
+    role | string || villager, werewolf, seer, healer
+    isPlayerAlive | bool
+    voted | string || kill, save
+    suspected | string || null, accused, seconded, killed, saved
+    protected | bool default: false
+    
+    
+
+*/

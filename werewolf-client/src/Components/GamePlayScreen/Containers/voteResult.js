@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import UserAvatar from '../Elements/userAvatar';
+import PlayerAvatar from '../Elements/playerAvatar';
 import { GameContext } from "../../../gameManagers/game-manager";
 import { Button } from '@material-ui/core';
 
@@ -12,7 +12,7 @@ const VoteResult = () => {
 
   return( 
     <div className="vote-result">
-        <UserAvatar username={theAccused.name} avatar={"https://via.placeholder.com/150x120"}/>
+        <PlayerAvatar playerName={theAccused.name} avatar={"https://via.placeholder.com/150x120"}/>
         <p> has been... </p>
         <h1> {theAccused.suspected} </h1> 
         <Button onClick={sunset} color="secondary" variant="contained" align="center" size="medium">continue</Button>

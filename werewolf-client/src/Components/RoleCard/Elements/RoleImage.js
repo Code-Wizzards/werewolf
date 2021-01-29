@@ -1,9 +1,9 @@
 import React from "react";
 
-const RoleImage = ({ userRole }) => {
+const RoleImage = ({ playerRole }) => {
   let roleImage;
 
-  switch (userRole) {
+  switch (playerRole) {
     case "villager":
       roleImage =
         "../../images/villager-role-image.png"

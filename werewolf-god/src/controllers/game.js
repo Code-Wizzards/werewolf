@@ -4,7 +4,7 @@ const { getUniqueRandomNumber,
   changeGameStage, 
   haveAllPlayersVoted, 
   assignRoles,
-  selectUser 
+  selectPlayer
 } = require('../util/helper-functions')
 
 const { games } = require('../mock-database')
@@ -21,8 +21,7 @@ const getGameState = (req, res) => {
 
  const startGame = (req, res) => {
    const gameId = req.params.gameId
-   const userId = req.params.userId
-   const game = selectGame(gameId)
+    const game = selectGame(gameId)
  
    if (game.stage !== 'lobby') {
      res.sendStatus(400)
@@ -37,29 +36,28 @@ const getGameState = (req, res) => {
  
    game.players = assignRoles(game.players);
    game.stage = 'role assignment';
- 
-   // const userRole = selectUser(userId, gameId).role;
-   
+    
    res.sendStatus(200)
  }
 
 
-const registerUser = (req, res) => {
+const registerPlayer = (req, res) => {
   const gameId = req.params.gameId;
   const requestedName = req.body.data.requestedName;
+  
   if(!requestedName) {
-  return res.sendStatus(400)
-}
+    return res.sendStatus(400)
+  }
 
-const newUser = {
-  id: getUniqueRandomNumber(1199,
-  games.map(game => game.players).map(player => player.id)),
-  name: requestedName
-}
+  const newPlayer = {
+    id: getUniqueRandomNumber(1199,
+    games.map(game => game.players).map(player => player.id)),
+    name: requestedName
+  }
 
-const thisGame = selectGame(gameId)
-  thisGame.players.push(newUser)
-  res.status(200).send(newUser)
+  const thisGame = selectGame(gameId)
+  thisGame.players.push(newPlayer)
+  res.status(200).send(newPlayer)
 }
 
 const setStatus = (req, res) => {
@@ -79,7 +77,7 @@ const setStatus = (req, res) => {
 const updateIsPlayerAlive = (req, res) => {
   const gameId = req.params.gameId;
   const game = selectGame(gameId);
-  const playerId = req.params.userId;
+  const playerId = req.params.playerId;
   const player = getPlayer(playerId, game);
 
   if (!player.isPlayerAlive) {
@@ -89,7 +87,7 @@ const updateIsPlayerAlive = (req, res) => {
   } else if (player.isPlayerAlive) {
    player.isPlayerAlive = false;
   }
-  res.send(player.isPlayerAlive);
+  res.status(200).send(player.isPlayerAlive);
 }
 
 const setVote = (req, res) => {   
@@ -153,7 +151,7 @@ const healPlayer = (req, res) => {
 }
 
 module.exports = {
-  registerUser,
+  registerPlayer,
   setStatus,
   updateIsPlayerAlive,
   setVote,

@@ -2,12 +2,12 @@ import React, { createContext } from 'react';
 import * as Server from '../RestServer'
 
 export const GameContext = createContext({
-    username:'',
-    userId:'',
+    playerName:'',
+    playerId:'',
     players: [],
     gameId: '',
     newGameStarted: false,
-    // addUser: () => {},
+    // addPlayer: () => {},
     // startNewGame: () => {},
     // joinGame: () => {},
     // setPlayerStatus: () => {},
@@ -26,11 +26,11 @@ export class GameProvider extends React.Component {
      this.setState({ errors: this.state.errors.slice(1)})
   }
 
-  addUser = async (newusername) => {
+  addPlayer = async (newPlayerName) => {
     const gameId = this.state.gameId
-    const userDetails = await Server.registerUser(newusername, gameId)
-    this.setState({ username: userDetails.name, 
-                    userId: userDetails.id,
+    const playerDetails = await Server.registerPlayer(newPlayerName, gameId)
+    this.setState({ playerName: playerDetails.name, 
+                    playerId: playerDetails.id,
                     gameStage: 'lobby'})
     console.log(this.state)
   };
@@ -63,7 +63,7 @@ export class GameProvider extends React.Component {
   };
 
   startGame = async () => {
-    const res = await Server.startGame(this.state.gameId, this.state.userId)
+    const res = await Server.startGame(this.state.gameId, this.state.playerId)
       if (res.error) {
           alert(res.error)
        }
@@ -86,7 +86,7 @@ export class GameProvider extends React.Component {
   }
 
   updateIsPlayerAlive = async () => {
-    const status = await Server.updateIsPlayerAlive(this.state.gameId, this.state.userId)
+    const status = await Server.updateIsPlayerAlive(this.state.gameId, this.state.playerId)
     this.setState({isPlayerAlive: status})
     // setTimeout( () => { console.log(this.state.isPlayerAlive) }, 5000);
   }
@@ -100,12 +100,12 @@ export class GameProvider extends React.Component {
   }
 
   getRole = () => {
-     const thisPlayer = this.state.players.find(player => player.id === this.state.userId);
-     this.setState({userRole: thisPlayer.role});
+     const thisPlayer = this.state.players.find(player => player.id === this.state.playerId);
+     this.setState({playerRole: thisPlayer.role});
   }
 
   setVote = (vote) => {
-    Server.setVote(this.state.gameId, this.state.userId, vote)
+    Server.setVote(this.state.gameId, this.state.playerId, vote)
   }
 
   sunset = async () => {
@@ -127,15 +127,15 @@ export class GameProvider extends React.Component {
     errors: [],
     players: [],
     gameId: '',
-    username:'',
-    userId: '',
-    userRole: '',
+    playerName:'',
+    playerId: '',
+    playerRole: '',
     isPlayerAlive: null,
     accused: null,
     gameStage: '',
     newGameStarted: false,
     createNewGame: this.createNewGame,
-    addUser: this.addUser,
+    addPlayer: this.addPlayer,
     startNewGame: this.startNewGame,
     joinGame: this.joinGame,
     refresh: this.refresh,

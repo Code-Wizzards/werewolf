@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 
 const LobbyScreen = ({ players }) => {
   const [ statusInput, setStatusInput ] = useState('')
-  const { userId, gameId, startGame } = useContext(GameContext)
+  const { playerId, gameId, startGame } = useContext(GameContext)
 
   const handleChange = (e) => {
     setStatusInput(e.target.value)
@@ -28,7 +28,7 @@ const LobbyScreen = ({ players }) => {
 
   const handleKeyPress = (e) => {
     if(e.keyCode == 13){
-      setPlayerStatus(userId, gameId, statusInput)
+      setPlayerStatus(playerId, gameId, statusInput)
       setStatusInput('')
       document.activeElement.blur();
     }

@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
-import UserAvatar from '../Elements/userAvatar';
+import PlayerAvatar from '../Elements/playerAvatar';
 import { GameContext } from "../../../gameManagers/game-manager";
 import PlayerListItem from '../Elements/playerListItem';
 import { Button } from '@material-ui/core';
 
 const VotingBooth = () => {
-   const { players, setVote, userId } = useContext(GameContext);
+   const { players, setVote, playerId } = useContext(GameContext);
    const theAccused = players.find(player => player.suspected === 'seconded');
-   const isThisPlayerTheAccused = theAccused.id === userId;
+   const isThisPlayerTheAccused = theAccused.id === playerId;
    
    const playersVotedKill = players.filter(player => player.voted === 'kill');
    const playersVotedKillList = playersVotedKill.map(player => 
@@ -24,7 +24,7 @@ const VotingBooth = () => {
 
    const handleClick = (vote) => {
     
-      if (theAccused.id === userId) {
+      if (theAccused.id === playerId) {
          alert('you cannot vote for yourself')
       } else {
          setVote(vote)
@@ -34,7 +34,7 @@ const VotingBooth = () => {
    
    return(
       <div className='voting-booth-wrap'>
-         <UserAvatar username={theAccused.name} avatar={"https://via.placeholder.com/150x120"} />
+         <PlayerAvatar playerName={theAccused.name} avatar={"https://via.placeholder.com/150x120"} />
          <div className='vote-area'>
             <Button id='kill' onClick={ () => handleClick('kill')} disabled={isThisPlayerTheAccused} color="secondary" variant="contained" align="center" size="small">kill</Button>
             <Button id='save' onClick={ () => handleClick('save')} disabled={isThisPlayerTheAccused} color="primary" variant="contained" align="center" size="small">save</Button>

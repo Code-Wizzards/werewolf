@@ -6,7 +6,7 @@ const { createNewGame } = require('./controllers/create-new.js')
 
 const { getGameState,
         startGame,
-        registerUser, 
+        registerPlayer, 
         setStatus, 
         updateIsPlayerAlive,
         setVote,
@@ -30,13 +30,13 @@ app.post('/createNewGame', createNewGame);
 
 app.get('/game/:gameId/getGameState', getGameState)
 
-app.get('/game/:gameId/user/:userId/startGame', startGame);
+app.get('/game/:gameId/player/:playerId/startGame', startGame);
 
-app.post('/game/:gameId/registerUser', registerUser)
+app.post('/game/:gameId/registerPlayer', registerPlayer)
 
 app.post('/game/:gameId/player/:playerId/setStatus', setStatus)
 
-app.post('/game/:gameId/user/:userId/updateIsPlayerAlive', updateIsPlayerAlive);
+app.post('/game/:gameId/player/:playerId/updateIsPlayerAlive', updateIsPlayerAlive);
 
 app.post('/game/:gameId/player/:playerId/playerSuspected', updatePlayerSuspected)
 
@@ -53,4 +53,3 @@ app.post('/game/:gameId/setRoles', setRoles)
 module.exports = app
   
 
-//TODO choose either 'user' or 'player' and only use one.

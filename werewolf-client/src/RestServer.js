@@ -18,14 +18,23 @@ const players = [
   }
 ]
 
-// export function startGame() {
-//   return {
-//     gameID:'123abc',
-//     state:'lobby'
-//   }
-// }
+async function sendToServer(path, data) {
+  const res = await axios.post(serverURL + path, {
+    method: 'POST',
+    data,
+    mode: 'no-cors',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json',
+    },
+    withCredentials: true,
+    credentials: 'same-origin',
+  })
+  // console.log('received from server', res.data)
+  return res.data // need to return something so can send something
+} 
 
-export async function joinGame(gameId){ //TODO: this should call out to the server to see if that game exists or not
+export async function joinGame(gameId){ 
   const checkGame = await fetchGameState(gameId);
   if (checkGame.error) {
     return {
@@ -49,26 +58,12 @@ export function setPlayerStatus(playerId, gameId, status) {
   sendToServer(`/game/${gameId}/player/${playerId}/setStatus`, data);
 }
 
-async function sendToServer(path, data) {
-  const res = await axios.post(serverURL + path, {
-    method: 'POST',
-    data,
-    mode: 'no-cors',
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json',
-    },
-    withCredentials: true,
-    credentials: 'same-origin',
-  })
-  // console.log('received from server', res.data)
-  return res.data // need to return something so can send something
-} 
 
-export function registerUser(requestedName, gameId) {
-  const newUser = sendToServer(`/game/${gameId}/registerUser`, {requestedName});
-  console.log('registeruser', newUser)
-  return newUser;
+
+export function registerPlayer(requestedName, gameId) {
+  const newPlayer = sendToServer(`/game/${gameId}/registerPlayer`, {requestedName});
+  console.log('registerPlayer', newPlayer)
+  return newPlayer;
 }
 
 export async function createNewGame() {
@@ -105,27 +100,27 @@ export async function fetchGameState(gameId) {
   return gameState
 }
 
-export function simulateUsersJoining() {
+export function simulatePlayersJoining() {
   let pcount = 5
   setInterval(() => {
-    const user = {
+    const Player = {
       id:++pcount,
       name:`p${pcount}`
     }
-    // console.log('user joined:', user)
-    players.push(user)
+    // console.log('Player joined:', Player)
+    players.push(Player)
     // console.log(players)
   }, 30000);
 }
 
 
-export async function startGame(gameId, userId) {
-  const res =  await getFromServer(`/game/${gameId}/user/${userId}/startGame`)
+export async function startGame(gameId, playerId) {
+  const res =  await getFromServer(`/game/${gameId}/player/${playerId}/startGame`)
   return res
 }
 
-export async function updateIsPlayerAlive(gameId, userId) {
- const isPlayerAlive = await sendToServer(`/game/${gameId}/user/${userId}/updateIsPlayerAlive`);
+export async function updateIsPlayerAlive(gameId, playerId) {
+ const isPlayerAlive = await sendToServer(`/game/${gameId}/player/${playerId}/updateIsPlayerAlive`);
   return isPlayerAlive;
  }
 
@@ -137,8 +132,8 @@ export async function updateIsPlayerAlive(gameId, userId) {
    sendToServer(`/game/${gameId}/player/${playerId}/playerSuspected`, { suspected: 'seconded' });
   }
 
-  export function setVote(gameId, userId, vote ) {
-     sendToServer(`/game/${gameId}/player/${userId}/setVote`, {vote})
+  export function setVote(gameId, playerId, vote ) {
+     sendToServer(`/game/${gameId}/player/${playerId}/setVote`, {vote})
   }
 
   export function sunset(gameId) {

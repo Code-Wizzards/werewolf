@@ -5,27 +5,27 @@ import VillagerNightButton from './villagerNightButton';
 import WerewolfNightButton from './werewolfNightButton';
 
 
-const NightButton = ({userRole, id}) => {
+const NightButton = ({playerRole, id}) => {
   
-  if (userRole === 'villager') {
+  if (playerRole === 'villager') {
     return(
       <VillagerNightButton id={id} />
     )
   }
 
-  if (userRole === 'healer') {
+  if (playerRole === 'healer') {
     return (
       <HealerNightButton id={id} />
     )
   }
 
-  if (userRole === 'seer') {
+  if (playerRole === 'seer') {
     return (
       <SeerNightButton id={id} />
     )
   }
 
-  if (userRole === 'werewolf') {
+  if (playerRole === 'werewolf') {
     return (
       <WerewolfNightButton id={id} />
     )

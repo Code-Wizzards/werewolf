@@ -1,8 +1,8 @@
 import React from "react";
 
-const RoleInfo = ({ userRole }) => {
+const RoleInfo = ({ playerRole }) => {
  
-  if (userRole === "villager") {
+  if (playerRole === "villager") {
     return (
       <p>
        Your village is under attack from Werewolves! Each day
@@ -14,7 +14,7 @@ const RoleInfo = ({ userRole }) => {
     );
   }
 
-  if (userRole === "werewolf") {
+  if (playerRole === "werewolf") {
     return (
       <p>
         You appear human but you're really a blood-thirsty beast. You and your
@@ -28,7 +28,7 @@ const RoleInfo = ({ userRole }) => {
     )
   }
 
-  if (userRole === "seer") {
+  if (playerRole === "seer") {
     return (
       <p>
        You are a villager with a special power: the ability to know the truth by moonlight.  
@@ -41,7 +41,7 @@ const RoleInfo = ({ userRole }) => {
     )
   }
 
-  if (userRole === "healer") {
+  if (playerRole === "healer") {
     return (
       <p>
       You are a villager with a special power: the ability to bring someone back from the brink of death. 

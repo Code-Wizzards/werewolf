@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import { GameContext } from '../../../../gameManagers/game-manager';
 
 
-const WerewolfNightButton = ({userRole, id}) => {
+const WerewolfNightButton = ({id}) => {
   
    const { killPlayer } = useContext(GameContext)
    const [ buttonText, setButtonText ] = useState('kill')
