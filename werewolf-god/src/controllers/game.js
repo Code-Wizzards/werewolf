@@ -1,8 +1,8 @@
-const { getUniqueRandomNumber, 
-  selectGame, 
-  getPlayer, 
-  changeGameStage, 
-  haveAllPlayersVoted, 
+const { getUniqueRandomNumber,
+  selectGame,
+  getPlayer,
+  changeGameStage,
+  haveAllPlayersVoted,
   assignRoles,
   selectPlayer
 } = require('../util/helper-functions')
@@ -10,48 +10,48 @@ const { getUniqueRandomNumber,
 const { games } = require('../mock-database')
 
 const getGameState = (req, res) => {
-   const gameId = req.params.gameId
-   const requestedGame = selectGame(gameId)
-   if (!requestedGame) {
-     res.status(404).send({ error: `client requested game ${gameId} doesn't exist` })
-   } else {
-     res.status(200).send(requestedGame)
-   }
- }
+  const gameId = req.params.gameId
+  const requestedGame = selectGame(gameId)
+  if (!requestedGame) {
+    res.status(404).send({ error: `client requested game ${gameId} doesn't exist` })
+  } else {
+    res.status(200).send(requestedGame)
+  }
+}
 
- const startGame = (req, res) => {
-   const gameId = req.params.gameId
-    const game = selectGame(gameId)
- 
-   if (game.stage !== 'lobby') {
-     res.sendStatus(400)
-     return
-   
-   }
- 
-   if (game.players.length < 7) {
-     res.status(400).send({ error: 'You must have at least 7 players to start the game' });
-     return
-   }
- 
-   game.players = assignRoles(game.players);
-   game.stage = 'role assignment';
-    
-   res.sendStatus(200)
- }
+const startGame = (req, res) => {
+  const gameId = req.params.gameId
+  const game = selectGame(gameId)
+
+  if (game.stage !== 'lobby') {
+    res.sendStatus(400)
+    return
+
+  }
+
+  if (game.players.length < 7) {
+    res.status(400).send({ error: 'You must have at least 7 players to start the game' });
+    return
+  }
+
+  game.players = assignRoles(game.players);
+  game.stage = 'role assignment';
+
+  res.sendStatus(200)
+}
 
 
 const registerPlayer = (req, res) => {
   const gameId = req.params.gameId;
   const requestedName = req.body.data.requestedName;
-  
-  if(!requestedName) {
+
+  if (!requestedName) {
     return res.sendStatus(400)
   }
 
   const newPlayer = {
     id: getUniqueRandomNumber(1199,
-    games.map(game => game.players).map(player => player.id)),
+      games.map(game => game.players).map(player => player.id)),
     name: requestedName
   }
 
@@ -81,25 +81,25 @@ const updateIsPlayerAlive = (req, res) => {
   const player = getPlayer(playerId, game);
 
   if (!player.isPlayerAlive) {
-   player.isPlayerAlive = true;
-  //  areAllPlayersReady(gameId) // use this for actual game play
-   changeGameStage(gameId, 'running-day') // use this while testing to not have to make all players ready
+    player.isPlayerAlive = true;
+    //  areAllPlayersReady(gameId) // use this for actual game play
+    changeGameStage(gameId, 'running-day') // use this while testing to not have to make all players ready
   } else if (player.isPlayerAlive) {
-   player.isPlayerAlive = false;
+    player.isPlayerAlive = false;
   }
   res.status(200).send(player.isPlayerAlive);
 }
 
-const setVote = (req, res) => {   
-  const game = selectGame(req.params.gameId);    
-  const playerId  = Number(req.params.playerId); 
+const setVote = (req, res) => {
+  const game = selectGame(req.params.gameId);
+  const playerId = Number(req.params.playerId);
   const theAccused = game.players.find(player => player.suspected === 'seconded');
-  if(playerId === theAccused.id) {
-   return res.status(400).send({ error: 'Players cannot vote for themselves'})
+  if (playerId === theAccused.id) {
+    return res.status(400).send({ error: 'Players cannot vote for themselves' })
   } else {
     const vote = req.body.data.vote;
     const player = getPlayer(playerId, game);
-    player.voted = vote; 
+    player.voted = vote;
     haveAllPlayersVoted(game)
     res.sendStatus(200)
   }
@@ -107,18 +107,18 @@ const setVote = (req, res) => {
 
 const updatePlayerSuspected = (req, res) => {
   try {
-    const game = selectGame(req.params.gameId);    
-    const playerId  = req.params.playerId; 
+    const game = selectGame(req.params.gameId);
+    const playerId = req.params.playerId;
     const player = getPlayer(playerId, game);
     player.suspected = req.body.data.suspected
     if (player.suspected === 'seconded') {
       game.stage = 'voting';
     }
     res.sendStatus(200);
-    } catch(err) {
-      console.error('error updating player.suspected', err);
-      res.sendStatus(500);
-    } 
+  } catch (err) {
+    console.error('error updating player.suspected', err);
+    res.sendStatus(500);
+  }
 }
 
 const sunset = (req, res) => {
@@ -138,14 +138,14 @@ const isPlayerWerewolf = (req, res) => {
   const id = parseInt(req.params.playerId, 10)
   const requestedPlayer = game.players.find(player => player.id === id)
   const answer = requestedPlayer.role === 'werewolf'
-  console.log('isPlayerWerewolf, controller, l143', {answer})
+  console.log('isPlayerWerewolf, controller, l143', { answer })
   res.status(200).json(answer)
 }
 
 const healPlayer = (req, res) => {
   const game = selectGame(req.params.gameId)
   const id = parseInt(req.params.playerId, 10)
-  const playerToHeal =  game.players.find(player => player.id === id)
+  const playerToHeal = game.players.find(player => player.id === id)
   playerToHeal.protected = true
   res.status(200)
 }
