@@ -76,10 +76,10 @@ export class GameProvider extends React.Component {
     setInterval(async () => {
       try {
         const gameState = await Server.fetchGameState(gameId)
-        this.setState({ players: gameState.players, gameStage: "running-night" })
-        // if (this.state.gameStage === "role assignment") {
+        this.setState({ players: gameState.players, gameStage: gameState.stage })
+        if (this.state.gameStage === "role assignment") {
           this.getRole()
-        // }
+        }
       }
       catch (error) {
         console.log('Error refreshing gameState:', error)
