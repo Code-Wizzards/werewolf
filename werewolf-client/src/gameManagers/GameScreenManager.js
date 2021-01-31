@@ -41,7 +41,7 @@ export default function GameScreenManager() {
          </GameConsumer> 
          <GameConsumer>
           {(gameState) => {
-          const { gameId, playerName, gameStage, players, playerRole } = gameState;
+          const { gameId, playerName, gameStage, players, playerRole, nightActionCompleted } = gameState;
           
           if (!gameId) {
               return (
@@ -67,7 +67,7 @@ export default function GameScreenManager() {
             const GamePlayScreenStages = ['running-day', 'running-night', 'voting', 'vote result']
             if (GamePlayScreenStages.includes(gameStage)) {
               return (
-                <GamePlayScreen playerRole={playerRole} playerName={playerName} gameStage={gameStage} players={players} />
+                <GamePlayScreen playerRole={playerRole} playerName={playerName} gameStage={gameStage} players={players} nightActionCompleted={nightActionCompleted} />
               )
             }
           }}

@@ -5,7 +5,7 @@ import { Button } from '@material-ui/core';
 
 
 const VoteResult = () => {
-  const { players, sunset } = useContext(GameContext);
+  const { players, startNightStage } = useContext(GameContext);
   const theAccused = players.find(player => player.suspected)
   
   
@@ -15,7 +15,7 @@ const VoteResult = () => {
         <PlayerAvatar playerName={theAccused.name} avatar={"https://via.placeholder.com/150x120"}/>
         <p> has been... </p>
         <h1> {theAccused.suspected} </h1> 
-        <Button onClick={sunset} color="secondary" variant="contained" align="center" size="medium">continue</Button>
+        <Button onClick={startNightStage} color="secondary" variant="contained" align="center" size="medium">continue</Button>
     </div>
   )
 

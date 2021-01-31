@@ -5,13 +5,13 @@ import AccuseButton from "./accuseButton";
 import NightButton from './nightButtons/nightButton'
 
 
-const GameZonePlayerList = ({ players, playerRole, gameStage }) => {
+const GameZonePlayerList = ({ players, playerRole, gameStage, nightActionCompleted }) => {
 
   const playerListDisplay = players.map(player => 
    <div className='player-list-item' key={player.id+100}>
       <PlayerListItem playerName={player.name} key={player.id+200} id={player.id}/>
       {gameStage === 'running-night' ? 
-      <NightButton id={player.id} key={player.id} playerRole={playerRole} /> :
+      <NightButton id={player.id} key={player.id} playerRole={playerRole} nightActionCompleted={nightActionCompleted} /> :
       <AccuseButton id={player.id} key={player.id} /> }  
    </div>
   );

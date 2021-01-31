@@ -2,18 +2,26 @@
 const { 
   selectGame, 
   getPlayer, 
+  changeGameStage
 
 } = require('../util/helper-functions')
 
 const setRoles = (req, res) => {
   const gameId = req.params.gameId
   const game = selectGame(gameId)
-  const playerId = req.body.id
-  const player = getPlayer(playerId, game)
-  player.role = req.body.role
+
+
+  game.players = req.body.players
   res.status(200).json(game.players)
 }
 
+const setStage = (req, res) => {
+  changeGameStage(req.params.gameId, req.body.stage)
+  const game = selectGame(req.params.gameId)
+  res.status(200).json(game.stage)
+}
+
 module.exports = {
-  setRoles
+  setRoles,
+  setStage
 }

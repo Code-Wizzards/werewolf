@@ -18,6 +18,25 @@ const players = [
   }
 ]
 
+async function getFromServer(path) {
+  try{
+     const res = await axios(serverURL + path, {
+        method: 'GET',
+        mode: 'no-cors',
+        headers: {
+           'Access-Control-Allow-Origin': '*',
+           'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+        credentials: 'same-origin',
+     })
+   return res.data
+  } catch (error) {
+        console.log(error.response.data)
+        return error.response.data
+   } 
+}
+
 async function sendToServer(path, data) {
   const res = await axios.post(serverURL + path, {
     method: 'POST',
@@ -33,7 +52,8 @@ async function sendToServer(path, data) {
   if (res.status > 300) {
     throw new Error('Error sending to server, received code:', res.status)
   }
-  return res.data // need to return something so can send something
+  
+  return res.data 
 } 
 
 export async function joinGame(gameId){ 
@@ -73,24 +93,7 @@ export async function createNewGame() {
   return gameId;
 }
 
-async function getFromServer(path) {
-   try{
-      const res = await axios(serverURL + path, {
-         method: 'GET',
-         mode: 'no-cors',
-         headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-         },
-         withCredentials: true,
-         credentials: 'same-origin',
-      })
-    return res.data
-   } catch (error) {
-         console.log(error.response.data)
-         return error.response.data
-    } 
-}
+
 
 // export async function getPlayers(gameId) {
 //   const players = getFromServer('/getPlayers')
@@ -138,16 +141,16 @@ export async function updateIsPlayerAlive(gameId, playerId) {
      sendToServer(`/game/${gameId}/player/${playerId}/setVote`, {vote})
   }
 
-  export function sunset(gameId) {
-    sendToServer(`/game/${gameId}/sunset`)
+  export function startNightStage(gameId) {
+    getFromServer(`/game/${gameId}/startNightStage`)
   }
 
-  export async function isPlayerWerewolf(gameId, playerId) {
-   const answer =  await getFromServer(`/game/${gameId}/player/${playerId}/isPlayerWerewolf`)
-   return answer
+  export async function isPlayerWerewolf(gameId, playerId, playerToCheckId) {
+   const response =  await sendToServer(`/game/${gameId}/isPlayerWerewolf`,  { playerId, playerToCheckId })
+   return response
   }
 
-  export async function healPlayer(gameId, playerId) {
-    const result = await sendToServer(`/game/${gameId}/player/${playerId}/healPlayer`)
-    return result
+  export async function healPlayer(gameId, playerId, playerToHealId) {
+    const response = await sendToServer(`/game/${gameId}/healPlayer`, { playerToHealId, playerId })
+    return response
   }

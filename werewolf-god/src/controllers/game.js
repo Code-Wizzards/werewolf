@@ -36,7 +36,7 @@ const startGame = (req, res) => {
 
   game.players = assignRoles(game.players);
   game.stage = 'role assignment';
-
+  console.log(game.players)
   res.sendStatus(200)
 }
 
@@ -51,8 +51,14 @@ const registerPlayer = (req, res) => {
 
   const newPlayer = {
     id: getUniqueRandomNumber(1199,
-      games.map(game => game.players).map(player => player.id)),
-    name: requestedName
+        games.map(game => game.players).map(player => player.id)),
+    name: requestedName,
+    role: null,
+    isPlayerAlive: false,
+    voted:  null,
+    suspected: null,
+    protected: false,
+    nightActionCompleted: false
   }
 
   const thisGame = selectGame(gameId)
@@ -121,7 +127,7 @@ const updatePlayerSuspected = (req, res) => {
   }
 }
 
-const sunset = (req, res) => {
+const startNightStage = (req, res) => {
   const { gameId } = req.params
   const game = selectGame(gameId)
   changeGameStage(gameId, 'running-night')
@@ -135,18 +141,21 @@ const sunset = (req, res) => {
 
 const isPlayerWerewolf = (req, res) => {
   const game = selectGame(req.params.gameId)
-  const id = parseInt(req.params.playerId, 10)
-  const requestedPlayer = game.players.find(player => player.id === id)
-  const answer = requestedPlayer.role === 'werewolf'
-  console.log('isPlayerWerewolf, controller, l143', { answer })
-  res.status(200).json(answer)
+  const { playerToCheckId, playerId } = req.body.data
+  const playerToCheck = game.players.find(player => player.id === playerToCheckId)
+  const result = playerToCheck.role === 'werewolf'
+  const thisPlayer = selectPlayer(playerId, game.id)
+  thisPlayer.nightActionCompleted = true
+  res.status(200).json(result)
 }
 
 const healPlayer = (req, res) => {
   const game = selectGame(req.params.gameId)
-  const id = parseInt(req.params.playerId, 10)
-  const playerToHeal = game.players.find(player => player.id === id)
+  const { playerToHealId, playerId } = req.body.data
+  const playerToHeal = game.players.find(player => player.id === playerToHealId)
+  const thisPlayer = selectPlayer(playerId, game.id)
   playerToHeal.protected = true
+  thisPlayer.nightActionCompleted = true
   res.sendStatus(200)
 }
 
@@ -158,7 +167,7 @@ module.exports = {
   updatePlayerSuspected,
   getGameState,
   startGame,
-  sunset,
+  startNightStage,
   isPlayerWerewolf,
   healPlayer
 }

@@ -8,7 +8,8 @@ export default {
   args: {
     gameStage: 'running-night',
     username: 'Wes',
-    players
+    players,
+    nightActionCompleted: true
   }
 }
 
@@ -16,20 +17,20 @@ const Template = args => <GamePlayScreen {...args} />
 
 export const Villager = Template.bind({})
 Villager.args = {
-  userRole: 'villager',
+  playerRole: 'villager',
 }
 
 export const Werewolf = Template.bind({})
 Werewolf.args = {
-  userRole: 'werewolf',
+  playerRole: 'werewolf',
 }
 
 export const Seer = Template.bind({})
 Seer.args = {
-  userRole: 'seer',
+  playerRole: 'seer',
 }
 
 export const Healer = Template.bind({})
 Healer.args = {
-  userRole: 'healer',  
+  playerRole: 'healer',  
 }

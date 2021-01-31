@@ -7,13 +7,13 @@ import VoteResult from "./voteResult";
 // import * as Server from '../../../RestServer';
 
 
-const GameZone = ({ gameStage, players, playerRole }) => {
+const GameZone = ({ gameStage, players, playerRole, nightActionCompleted }) => {
   
    if (gameStage === 'running-day' || gameStage === 'running-night') {
       return (
          <div className="game-zone">
             <h1> the village </h1>
-            <GameZonePlayerList players={players} playerRole={playerRole} gameStage={gameStage} />
+            <GameZonePlayerList players={players} playerRole={playerRole} gameStage={gameStage} nightActionCompleted={nightActionCompleted} />
          </div>
       );
    }

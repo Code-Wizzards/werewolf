@@ -7,12 +7,12 @@ const { getGameState,
   updateIsPlayerAlive,
   setVote,
   updatePlayerSuspected,
-  sunset,
+  startNightStage,
   isPlayerWerewolf,
   healPlayer
 } = require('./controllers/game')
 
-const { setRoles } = require('./controllers/devHelpers')
+const { setRoles, setStage } = require('./controllers/devHelpers')
 
 const router = express.Router()
 
@@ -24,9 +24,12 @@ router.post('/:gameId/player/:playerId/setStatus', setStatus)
 router.post('/:gameId/player/:playerId/updateIsPlayerAlive', updateIsPlayerAlive);
 router.post('/:gameId/player/:playerId/playerSuspected', updatePlayerSuspected)
 router.post('/:gameId/player/:playerId/setVote', setVote);
-router.post('/:gameId/sunset', sunset)
-router.get('/:gameId/player/:playerId/isPlayerWerewolf', isPlayerWerewolf)
-router.post('/:gameId/player/:playerId/healPlayer', healPlayer)
+router.get('/:gameId/startNightStage', startNightStage)
+router.post('/:gameId/isPlayerWerewolf', isPlayerWerewolf)
+router.post('/:gameId/healPlayer', healPlayer)
+
+// For development only
 router.post('/:gameId/setRoles', setRoles)
+router.post('/:gameId/setStage', setStage)
 
 module.exports = { router } 

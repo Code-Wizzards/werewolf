@@ -26,6 +26,10 @@ export class GameProvider extends React.Component {
     this.setState({ errors: this.state.errors.slice(1) })
   }
 
+  selectThisPlayer = () => {
+   return this.state.players.find(player => player.id === this.state.playerId);
+  }
+
   addPlayer = async (newPlayerName) => {
     const gameId = this.state.gameId
     const playerDetails = await Server.registerPlayer(newPlayerName, gameId)
@@ -77,20 +81,25 @@ export class GameProvider extends React.Component {
       try {
         const gameState = await Server.fetchGameState(gameId)
         this.setState({ players: gameState.players, gameStage: gameState.stage })
-        if (this.state.gameStage === "role assignment") {
-          this.getRole()
-        }
+        this.updateThisPlayer()
       }
       catch (error) {
         console.log('Error refreshing gameState:', error)
       }
+     
     }, 1000)
   }
 
+  updateThisPlayer = () => {
+    const thisPlayer = this.selectThisPlayer()
+    this.setState({ playerRole: thisPlayer.role, 
+                    isPlayerAlive: thisPlayer.isPlayerAlive,
+                    nightActionCompleted: thisPlayer.nightActionCompleted })
+  }
+
   updateIsPlayerAlive = async () => {
-    const status = await Server.updateIsPlayerAlive(this.state.gameId, this.state.playerId)
-    this.setState({ isPlayerAlive: status })
-    // setTimeout( () => { console.log(this.state.isPlayerAlive) }, 5000);
+    await Server.updateIsPlayerAlive(this.state.gameId, this.state.playerId)
+    // this.setState({ isPlayerAlive: status })
   }
 
   playerAccused = (accuseButtonId) => {
@@ -101,33 +110,37 @@ export class GameProvider extends React.Component {
     Server.playerSeconded(this.state.gameId, accuseButtonId);
   }
 
-  getRole = () => {
-    const thisPlayer = this.state.players.find(player => player.id === this.state.playerId);
-    // this.setState({ playerRole: thisPlayer.role });
-    this.setState({ playerRole: "healer" });
-  }
+  // getRole = () => {
+  //   const thisPlayer = this.state.selectThisPlayer()
+  //   this.setState({ playerRole: thisPlayer.role });
+  //   // this.setState({ playerRole: "healer" });
+  // }
 
   setVote = (vote) => {
     Server.setVote(this.state.gameId, this.state.playerId, vote)
   }
 
-  sunset = async () => {
-    await Server.sunset(this.state.gameId)
+  startNightStage = async () => {
+    await Server.startNightStage(this.state.gameId)
   }
 
-  isPlayerWerewolf = async (playerId) => {
-    const answer = await Server.isPlayerWerewolf(this.state.gameId, playerId)
-    console.log('isPlayerWerewolf GM', { answer })
-    return answer.body.message
-  }
-
-  healPlayer = async (playerId) => {
+  isPlayerWerewolf = async (playerToCheckId) => {
     try {
-      await Server.healPlayer(this.state.gameId, playerId)
+      const result = await Server.isPlayerWerewolf(this.state.gameId, this.state.playerId, playerToCheckId)
+      return result
+    } catch (error) {
+      console.log('Error making IsPlayerWerewolf request to server:', error)
+    }
+    
+  }
+
+  healPlayer = async (playerToHealId) => {
+    try {
+      await Server.healPlayer(this.state.gameId, this.state.playerId, playerToHealId)
     } catch(error) {
       console.log('Error making heal player request to server:', error)
       return false
-    }
+    } 
     return true
   }
 
@@ -139,9 +152,11 @@ export class GameProvider extends React.Component {
     playerId: '',
     playerRole: '',
     isPlayerAlive: null,
-    accused: null,
+    suspected: null,
     gameStage: '',
     newGameStarted: false,
+    nightActionCompleted: false,
+    selectThisPlayer: this.selectThisPlayer,
     createNewGame: this.createNewGame,
     addPlayer: this.addPlayer,
     startNewGame: this.startNewGame,
@@ -155,7 +170,7 @@ export class GameProvider extends React.Component {
     setVote: this.setVote,
     addError: this.addError,
     removeError: this.removeError,
-    sunset: this.sunset,
+    startNightStage: this.startNightStage,
     isPlayerWerewolf: this.isPlayerWerewolf,
     healPlayer: this.healPlayer
   }

@@ -2,14 +2,14 @@ import React, { useState, useContext } from 'react'
 import { GameContext } from '../../../../gameManagers/game-manager';
 
 
-const SeerNightButton = ({ id }) => {
+const SeerNightButton = ({ id, nightActionCompleted }) => {
 
    const { isPlayerWerewolf } = useContext(GameContext)
    const [ buttonText, setButtonText ] = useState('wolf?')
    
   const style =  {
-    backgroundColor: '#841f55',
-    color: 'white'
+    backgroundColor: nightActionCompleted ? '#874368' : '#841f55',
+    color: nightActionCompleted ? '#b998aa' : 'white',
   } 
 
 
@@ -30,6 +30,7 @@ const SeerNightButton = ({ id }) => {
  
   return (
     <button 
+            disabled={nightActionCompleted}
             id={id} 
             style={style} 
             onClick={handleClick}> 
