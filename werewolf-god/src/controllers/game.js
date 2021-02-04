@@ -153,10 +153,18 @@ const healPlayer = (req, res) => {
   const game = selectGame(req.params.gameId)
   const { playerToHealId, playerId } = req.body.data
   const playerToHeal = game.players.find(player => player.id === playerToHealId)
-  const thisPlayer = selectPlayer(playerId, game.id)
+  
   playerToHeal.protected = true
   thisPlayer.nightActionCompleted = true
   res.sendStatus(200)
+}
+
+const chooseVictim = (req, res) => {
+  const game = selectGame(req.params.gameId)
+  console.log('game', req.body)
+  const { playerId, victimId } = req.body.data
+  const thisPlayer = selectPlayer(playerId, game.id)
+  thisPlayer.victimId = victimId
 }
 
 module.exports = {
@@ -169,6 +177,7 @@ module.exports = {
   startGame,
   startNightStage,
   isPlayerWerewolf,
-  healPlayer
+  healPlayer,
+  chooseVictim
 }
 

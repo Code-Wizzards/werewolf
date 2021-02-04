@@ -1,5 +1,5 @@
-import React, { Component, useContext } from 'react'
-import Typography from '@material-ui/core/Typography';
+import React, { useContext } from 'react'
+// import Typography from '@material-ui/core/Typography';
 import '../CSS/App.css'
 import { GameConsumer, GameContext } from './game-manager'
 import StartScreen from '../Components/StartScreen'
@@ -8,7 +8,7 @@ import EnterNameForm from '../Components/EnterNameForm';
 import Title from '../Components/Title';
 import RoleCard from '../Components/RoleCard/RoleCard';
 import GamePlayScreen from '../Components/GamePlayScreen/GamePlayScreen';
-import { withTheme } from '@material-ui/core';
+// import { withTheme } from '@material-ui/core';
 
 export default function GameScreenManager() {
   
@@ -41,7 +41,7 @@ export default function GameScreenManager() {
          </GameConsumer> 
          <GameConsumer>
           {(gameState) => {
-          const { gameId, playerName, gameStage, players, playerRole, nightActionCompleted } = gameState;
+          const { gameId, playerName, playerId, gameStage, players, playerRole, nightActionCompleted } = gameState;
           
           if (!gameId) {
               return (
@@ -67,7 +67,12 @@ export default function GameScreenManager() {
             const GamePlayScreenStages = ['running-day', 'running-night', 'voting', 'vote result']
             if (GamePlayScreenStages.includes(gameStage)) {
               return (
-                <GamePlayScreen playerRole={playerRole} playerName={playerName} gameStage={gameStage} players={players} nightActionCompleted={nightActionCompleted} />
+                <GamePlayScreen playerRole={playerRole} 
+                                playerName={playerName} 
+                                playerId={playerId} 
+                                gameStage={gameStage} 
+                                players={players} 
+                                nightActionCompleted={nightActionCompleted} />
               )
             }
           }}

@@ -1,19 +1,19 @@
-import React, { useContext } from "react";
+import React from "react";
 import GameZonePlayerList from "../Elements/gameZonePlayerList";
-import { GameContext } from "../../../gameManagers/game-manager";
+// import { GameContext } from "../../../gameManagers/game-manager";
 import VotingBooth from "./votingBooth";
 import VoteResult from "./voteResult";
 
 // import * as Server from '../../../RestServer';
 
 
-const GameZone = ({ gameStage, players, playerRole, nightActionCompleted }) => {
+const GameZone = ({ gameStage, players, playerId, playerRole, nightActionCompleted }) => {
   
    if (gameStage === 'running-day' || gameStage === 'running-night') {
       return (
          <div className="game-zone">
             <h1> the village </h1>
-            <GameZonePlayerList players={players} playerRole={playerRole} gameStage={gameStage} nightActionCompleted={nightActionCompleted} />
+            <GameZonePlayerList players={players} playerId={playerId} playerRole={playerRole} gameStage={gameStage} nightActionCompleted={nightActionCompleted} />
          </div>
       );
    }

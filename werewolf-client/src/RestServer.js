@@ -84,7 +84,6 @@ export function setPlayerStatus(playerId, gameId, status) {
 
 export function registerPlayer(requestedName, gameId) {
   const newPlayer = sendToServer(`/game/${gameId}/registerPlayer`, {requestedName});
-  console.log('registerPlayer', newPlayer)
   return newPlayer;
 }
 
@@ -151,6 +150,10 @@ export async function updateIsPlayerAlive(gameId, playerId) {
   }
 
   export async function healPlayer(gameId, playerId, playerToHealId) {
-    const response = await sendToServer(`/game/${gameId}/healPlayer`, { playerToHealId, playerId })
+    const response = await sendToServer(`/game/${gameId}/healPlayer`, {  playerId, playerToHealId })
     return response
+  }
+
+  export async function chooseVictim(gameId, playerId, victimId) {
+    await sendToServer(`/game/${gameId}/chooseVictim`, { playerId, victimId })
   }

@@ -87,14 +87,15 @@ export class GameProvider extends React.Component {
         console.log('Error refreshing gameState:', error)
       }
      
-    }, 1000)
+    }, 500)
   }
 
   updateThisPlayer = () => {
     const thisPlayer = this.selectThisPlayer()
     this.setState({ playerRole: thisPlayer.role, 
                     isPlayerAlive: thisPlayer.isPlayerAlive,
-                    nightActionCompleted: thisPlayer.nightActionCompleted })
+                    nightActionCompleted: thisPlayer.nightActionCompleted
+                   })
   }
 
   updateIsPlayerAlive = async () => {
@@ -144,6 +145,14 @@ export class GameProvider extends React.Component {
     return true
   }
 
+  chooseVictim = async (victimId) => {
+    try {
+      await Server.chooseVictim(this.state.gameId, this.state.playerId, victimId)
+    } catch(error) {
+      console.error(error)
+    }
+  }
+
   state = {
     errors: [],
     players: [],
@@ -172,7 +181,8 @@ export class GameProvider extends React.Component {
     removeError: this.removeError,
     startNightStage: this.startNightStage,
     isPlayerWerewolf: this.isPlayerWerewolf,
-    healPlayer: this.healPlayer
+    healPlayer: this.healPlayer,
+    chooseVictim: this.chooseVictim
   }
 
   render() {

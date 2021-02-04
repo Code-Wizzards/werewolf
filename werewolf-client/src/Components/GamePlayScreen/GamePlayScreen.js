@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import "./gameplay-screen-styles.css";
 import Header from "./Containers/Header.js";
 import GameZone from "./Containers/GameZoneManager";
 import GameLog from "./Containers/GameLog";
 
 
-export default function GamePlayScreen({ playerRole, playerName, gameStage, players, nightActionCompleted }) {
+export default function GamePlayScreen({ playerRole, playerName, playerId, gameStage, players, nightActionCompleted }) {
 
   return (
     <div className={`game-play-screen ${gameStage === 'running-night' ? 'night-screen' : ''}`}>
@@ -14,7 +14,7 @@ export default function GamePlayScreen({ playerRole, playerName, gameStage, play
         playerName={playerName}
         avatar="https://via.placeholder.com/150x120"
       />
-      <GameZone gameStage={gameStage} players={players} playerRole={playerRole} nightActionCompleted={nightActionCompleted} />
+      <GameZone gameStage={gameStage} players={players} playerId={playerId} playerRole={playerRole} nightActionCompleted={nightActionCompleted} />
       <GameLog />
     </div>
   );

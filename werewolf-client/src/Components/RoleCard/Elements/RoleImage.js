@@ -27,7 +27,7 @@ const RoleImage = ({ playerRole }) => {
       break;
 
     default:
-      console.log("error");
+      roleImage = ""
   }
 
   return <img alt="your role" src={roleImage} style={{maxHeight: "350px"}} />;

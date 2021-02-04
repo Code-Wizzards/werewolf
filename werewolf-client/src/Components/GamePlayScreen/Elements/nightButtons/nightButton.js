@@ -6,7 +6,7 @@ import WerewolfNightButton from './werewolfNightButton';
 import { GameContext } from "../../../../gameManagers/game-manager";
 
 
-const NightButton = ({playerRole, id, nightActionCompleted}) => {
+const NightButton = ({playerRole, playerId, id, nightActionCompleted, werewolves}) => {
 
 // const {nightActionCompleted} = useContext(GameContext)
 // console.log({nightActionCompleted})
@@ -31,7 +31,7 @@ const NightButton = ({playerRole, id, nightActionCompleted}) => {
 
   if (playerRole === 'werewolf') {
     return (
-      <WerewolfNightButton id={id} />
+      <WerewolfNightButton id={id} playerId={playerId} werewolves={werewolves} />
     )
   }
 
