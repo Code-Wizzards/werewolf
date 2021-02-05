@@ -31,7 +31,7 @@ const NightButton = ({playerRole, playerId, id, nightActionCompleted, werewolves
 
   if (playerRole === 'werewolf') {
     return (
-      <WerewolfNightButton id={id} playerId={playerId} werewolves={werewolves} />
+      <WerewolfNightButton id={id} playerId={playerId} werewolves={werewolves} nightActionCompleted={nightActionCompleted}/>
     )
   }
 

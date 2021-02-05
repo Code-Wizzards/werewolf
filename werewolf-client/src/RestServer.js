@@ -157,3 +157,7 @@ export async function updateIsPlayerAlive(gameId, playerId) {
   export async function chooseVictim(gameId, playerId, victimId) {
     await sendToServer(`/game/${gameId}/chooseVictim`, { playerId, victimId })
   }
+
+  export async function killVictim(gameId, playerId, victimId) {
+    await sendToServer(`/game/${gameId}/killVictim`, { playerId, victimId })
+  }

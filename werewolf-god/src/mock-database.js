@@ -63,3 +63,11 @@ const players = [
     
 
 */
+
+/* Game
+id
+stage
+players
+
+
+*/

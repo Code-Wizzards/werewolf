@@ -9,7 +9,8 @@ export default {
     gameStage: 'running-night',
     username: 'Wes',
     players,
-    nightActionCompleted: true
+    nightActionCompleted: false,
+   
   }
 }
 
@@ -23,6 +24,8 @@ Villager.args = {
 export const Werewolf = Template.bind({})
 Werewolf.args = {
   playerRole: 'werewolf',
+  playerId: 100,
+  werewolves: [{id: 100, victimId: 300}, {id: 600, victimId: 300}]
 }
 
 export const Seer = Template.bind({})

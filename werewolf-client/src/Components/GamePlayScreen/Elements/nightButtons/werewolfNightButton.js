@@ -2,47 +2,42 @@ import React, { useState, useContext } from 'react'
 import { GameContext } from '../../../../gameManagers/game-manager';
 
 
-const WerewolfNightButton = ({id, playerId, werewolves}) => {
+const WerewolfNightButton = ({id, playerId, werewolves, nightActionCompleted}) => {
   
-   const { chooseVictim } = useContext(GameContext)
-   const [ buttonText, setButtonText ] = useState('kill')
+  const { chooseVictim, killVictim } = useContext(GameContext)
+  
+  const thisWerewolfVictim = werewolves.find(wolf => wolf.id === playerId).victimId
+  const otherWerewolfVictim = werewolves.find(wolf => wolf.id !== playerId).victimId
    
-   const thisWerewolf = werewolves.find(wolf => wolf.id === playerId)
-   const otherWerewolf = werewolves.find(wolf => wolf.id !== playerId)
-   
-   let border = 'none'
+  let border = 'none'
+  let text = 'kill'
 
-   if (thisWerewolf.victimId === id) {
+  if (thisWerewolfVictim === id && otherWerewolfVictim === id) {
+     border = ''
+     text = 'killed'
+   } else if (thisWerewolfVictim === id) {
      border = '2px solid white'
-   }
-
-   if (otherWerewolf.victimId === id) {
+   } else if (otherWerewolfVictim === id) {
      border = '2px solid blue'
    }
  
-   const style = {
-     backgroundColor: '#df1623',
-     color: 'white',
-     border
+  const style = {
+    backgroundColor: nightActionCompleted ? '#d14951' : '#df1623',
+    color: nightActionCompleted ? '#e3acac' : 'white',
+    border
    }
-  
-
-  
-
-  async function handleClick() {
-   chooseVictim(id)
-    
-  }
-   
-
-
  
+  async function handleClick() {
+    id === otherWerewolfVictim ? await killVictim(id) : await chooseVictim(id) 
+      
+  }
+
   return (
-    <button
+    <button disabled={nightActionCompleted}
             id={id} 
             style={style} 
             onClick={handleClick}> 
-            {buttonText} 
+            {text} 
     </button>
   )
 }

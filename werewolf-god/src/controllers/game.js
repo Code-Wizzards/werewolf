@@ -4,7 +4,8 @@ const { getUniqueRandomNumber,
   changeGameStage,
   haveAllPlayersVoted,
   assignRoles,
-  selectPlayer
+  selectPlayer,
+  areAllNightActionsCompleted,
 } = require('../util/helper-functions')
 
 const { games } = require('../mock-database')
@@ -58,7 +59,9 @@ const registerPlayer = (req, res) => {
     voted:  null,
     suspected: null,
     protected: false,
-    nightActionCompleted: false
+    nightActionCompleted: false,
+    victimId: 0,
+    killedByWolf: null,
   }
 
   const thisGame = selectGame(gameId)
@@ -135,25 +138,25 @@ const startNightStage = (req, res) => {
     player.suspected = ""
     player.voted = ""
   })
-  console.log('sunset', game.players, game.stage)
   res.sendStatus(200)
 }
 
 const isPlayerWerewolf = (req, res) => {
   const game = selectGame(req.params.gameId)
   const { playerToCheckId, playerId } = req.body.data
-  const playerToCheck = game.players.find(player => player.id === playerToCheckId)
+  const playerToCheck = selectPlayer(playerToCheckId, game.id)
   const result = playerToCheck.role === 'werewolf'
   const thisPlayer = selectPlayer(playerId, game.id)
   thisPlayer.nightActionCompleted = true
+  areAllNightActionsCompleted(game)
   res.status(200).json(result)
 }
 
 const healPlayer = (req, res) => {
   const game = selectGame(req.params.gameId)
   const { playerToHealId, playerId } = req.body.data
-  const playerToHeal = game.players.find(player => player.id === playerToHealId)
-  
+  const playerToHeal = selectPlayer(playerToHealId, game.id)
+  const thisPlayer = selectPlayer(playerId, game.id)
   playerToHeal.protected = true
   thisPlayer.nightActionCompleted = true
   res.sendStatus(200)
@@ -161,10 +164,27 @@ const healPlayer = (req, res) => {
 
 const chooseVictim = (req, res) => {
   const game = selectGame(req.params.gameId)
-  console.log('game', req.body)
   const { playerId, victimId } = req.body.data
   const thisPlayer = selectPlayer(playerId, game.id)
   thisPlayer.victimId = victimId
+  areAllNightActionsCompleted(game)
+  res.sendStatus(200)
+}
+
+const killVictim = (req, res) => {
+  const game = selectGame(req.params.gameId)
+  const { victimId, playerId } = req.body.data
+  const victim = selectPlayer(victimId, game.id)
+  const thisPlayer = selectPlayer(playerId, game.id)
+  const otherWerewolf = game.players.find(player => player.role === 'werewolf' && player.id !== playerId)
+
+  victim.killedByWolf = true
+  thisPlayer.victimId = victimId
+  thisPlayer.nightActionCompleted = true
+  otherWerewolf.nightActionCompleted = true
+ 
+  areAllNightActionsCompleted(game)
+  res.status(200).send({ victim })
 }
 
 module.exports = {
@@ -178,6 +198,7 @@ module.exports = {
   startNightStage,
   isPlayerWerewolf,
   healPlayer,
-  chooseVictim
+  chooseVictim,
+  killVictim
 }
 

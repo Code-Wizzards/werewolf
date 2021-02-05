@@ -28,7 +28,7 @@ const VotingBooth = () => {
          alert('you cannot vote for yourself')
       } else {
          setVote(vote)
-      }
+      }  
 
    }
    

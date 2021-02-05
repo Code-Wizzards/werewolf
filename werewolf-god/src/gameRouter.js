@@ -10,7 +10,8 @@ const { getGameState,
   startNightStage,
   isPlayerWerewolf,
   healPlayer,
-  chooseVictim
+  chooseVictim,
+  killVictim,
 } = require('./controllers/game')
 
 const { setRoles, setStage } = require('./controllers/dev-helpers')
@@ -29,6 +30,7 @@ router.get('/:gameId/startNightStage', startNightStage)
 router.post('/:gameId/isPlayerWerewolf', isPlayerWerewolf)
 router.post('/:gameId/healPlayer', healPlayer)
 router.post('/:gameId/chooseVictim', chooseVictim)
+router.post('/:gameId/killVictim', killVictim)
 
 // For development only
 router.post('/:gameId/setRoles', setRoles)

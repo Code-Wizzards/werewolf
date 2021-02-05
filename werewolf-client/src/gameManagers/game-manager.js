@@ -153,6 +153,14 @@ export class GameProvider extends React.Component {
     }
   }
 
+  killVictim = async (victimId) => {
+    try {
+      await Server.killVictim(this.state.gameId, this.state.playerId, victimId)
+    } catch(error) {
+      console.error(error)
+    }
+  }
+
   state = {
     errors: [],
     players: [],
@@ -182,7 +190,8 @@ export class GameProvider extends React.Component {
     startNightStage: this.startNightStage,
     isPlayerWerewolf: this.isPlayerWerewolf,
     healPlayer: this.healPlayer,
-    chooseVictim: this.chooseVictim
+    chooseVictim: this.chooseVictim,
+    killVictim: this.killVictim,
   }
 
   render() {

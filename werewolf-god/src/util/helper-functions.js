@@ -69,9 +69,9 @@ function selectGame(gameId) {
  }
  
  function haveAllPlayersVoted(game) {
-    const players = game.players;
-    const playersVoted = players.filter(player => player.voted);
-    if (players.length-1 === playersVoted.length) {
+    const { players } = game
+    const playersVoted = players.filter(player => player.voted)
+    if (playersVoted.length === players.length-1) {
        changeGameStage(game.id, 'vote result')
        voteCount(game)
     }
@@ -96,11 +96,22 @@ function selectGame(gameId) {
     const theAccused = players.find(player => player.suspected === 'seconded');
     if (killCount > saveCount) {
        theAccused.suspected = 'killed';
-       theAccused.isPlayerAlive === false;
+       theAccused.isPlayerAlive = false;
     } else {
        theAccused.suspected = 'saved'
     }
-    console.log({ theAccused }, 'voteCount')
+ }
+
+ function areAllNightActionsCompleted(game) {
+  const nightPlayers = game.players.filter(player => player.role !== 'villager')
+  if (nightPlayers.every(player => player.nightActionCompleted)) {
+    setTimeout(()=> {
+      changeGameStage(game.id, 'running-day')
+      game.players.forEach(player => {
+      player.nightActionCompleted = false
+      })
+    }, 3000)
+  }
  }
 
  module.exports = {
@@ -112,5 +123,6 @@ function selectGame(gameId) {
     changeGameStage,
     areAllPlayersReady,
     haveAllPlayersVoted,
-    voteCount
+    voteCount,
+    areAllNightActionsCompleted,
  }
