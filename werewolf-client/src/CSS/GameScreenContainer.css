@@ -13,3 +13,15 @@
   margin: 20px 0px 0px 0px;
 }
 
+.night-screen {
+  background-color: #040139;
+  color: white;
+}
+
+.night-screen .title {
+  color: #df1623;
+}
+
+.day-screen {
+  color: #040139;
+}

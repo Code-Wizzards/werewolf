@@ -12,12 +12,10 @@ const HealerNightButton = ({id, nightActionCompleted}) => {
                 backgroundColor: nightActionCompleted ? '#8ccb8f' : '#7bdf7f',
   }
 
-
   async function handleClick() {
     const playerIsHealed = await healPlayer(id)
-    let buttonText = playerIsHealed ? 'Healed' : 'Heal'
-    setButtonText(buttonText)
-
+    let text = playerIsHealed ? 'Healed' : 'Heal'
+    setButtonText(text)
   }
  
   return (

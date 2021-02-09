@@ -15,18 +15,9 @@ const SeerNightButton = ({ id, nightActionCompleted }) => {
 
   async function handleClick() {
     const answer = await isPlayerWerewolf(id)
-    answer ? playerIsWerewolf() : playerIsNotWerewolf()
+    let text = answer ? 'yes' : 'no'
+    setButtonText(text)
   }
-
-  function playerIsWerewolf() {
-    setButtonText('YES')
-  }
-
-  function playerIsNotWerewolf() {
-    setButtonText('NO')
-  }
-
-
  
   return (
     <button 
@@ -34,7 +25,7 @@ const SeerNightButton = ({ id, nightActionCompleted }) => {
             id={id} 
             style={style} 
             onClick={handleClick}> 
-            { buttonText } 
+            {buttonText} 
     </button>
   )
 }

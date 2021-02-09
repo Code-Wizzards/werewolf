@@ -1,37 +1,49 @@
-import React, { createContext } from 'react';
+import React, { createContext } from 'react'
 import * as Server from '../RestServer'
 
-export const GameContext = createContext({
-  playerName: '',
-  playerId: '',
-  players: [],
-  gameId: '',
-  newGameStarted: false,
-  // addPlayer: () => {},
-  // startNewGame: () => {},
-  // joinGame: () => {},
-  // setPlayerStatus: () => {},
-  // startGame: () => {}
-}
-);
+export const GameContext = createContext()
 
-export class GameProvider extends React.Component {
+export function GameProvider() {
+  const [errors, setErrors] = useState([])
 
-  addError = (error) => {
-    this.setState({ errors: [...this.state.errors, error] })
-    setTimeout(() => this.state.removeError(), 5000)
+  const [gameId, setGameId] = useState()
+  const [gameState, setGameState] = useState({players: [], stage: '', newGameStarted: false })
+  const [playerInfo, setPlayerInfo] = useState({ name: '', id: '', role: '' })
+
+  const [setUpFunctions] = useState({ addPlayer, joinGame, createNewGame, startGame, getRole,  })
+
+  const [gameFunctions] = useState({ selectThisPlayer, updateIsPlayerAlive, startNightStage })
+
+  const [playerState, setPlayerState] = useState({ isPlayerAlive: false, 
+                                                   suspected: '', 
+                                                   nightActionCompleted: false })
+
+  const [playerDayActions] = useState({ accusePlayer, secondPlayer, setVote })
+  const [playerNightActions] = useState({ chooseVictim, killVictim, healPlayer, isPlayerWerewolf })
+  
+
+
+
+  const addError = (error) => {
+   setErrors(prevErrors => {
+     return [...prevErrors, error]
+   })
+    setTimeout(() => removeError(), 5000)
   }
 
-  removeError = () => {
-    this.setState({ errors: this.state.errors.slice(1) })
+  const removeError = () => {
+    setErrors(prevErrors => {
+      prevErrors.slice(1)
+      return prevErrors
+    })
   }
 
-  selectThisPlayer = () => {
-   return this.state.players.find(player => player.id === this.state.playerId);
+  const selectThisPlayer = () => {
+   return players.find(player => player.id === playerId);
   }
 
-  addPlayer = async (newPlayerName) => {
-    const gameId = this.state.gameId
+  const addPlayer = async (newPlayerName) => {
+    const gameId = gameId
     const playerDetails = await Server.registerPlayer(newPlayerName, gameId)
     this.setState({
       playerName: playerDetails.name,
@@ -41,18 +53,19 @@ export class GameProvider extends React.Component {
     console.log(this.state)
   };
 
-  createNewGame = async () => {
+  const createNewGame = async () => {
     const gameIdObj = await Server.createNewGame();
     const gameId = gameIdObj.gameId  // grab id from object so can pass down just the number, not an object
     this.setState({ gameId: gameId })
+    this.setState({ newGameStarted: true })
     this.refresh(gameId)
   };
 
-  joinGame = async (gameId) => {
+  const joinGame = async (gameId) => {
     try {
       const gameState = await Server.joinGame(gameId)
       if (gameState.error) {
-        this.state.addError(gameState.error)
+        addError(gameState.error)
       } else {
         this.setState({ gameId: gameState.gameId })
         this.setState({ players: gameState.players })
@@ -63,20 +76,17 @@ export class GameProvider extends React.Component {
     }
   }
 
-  startNewGame = () => {
-    this.createNewGame()
-    this.setState({ newGameStarted: true })
-  };
+  
 
-  startGame = async () => {
-    const res = await Server.startGame(this.state.gameId, this.state.playerId)
+  const startGame = async () => { // called by lobbyscreen
+    const res = await Server.startGame(gameId, playerId)
     if (res.error) {
       alert(res.error)
     }
 
   }
 
-  refresh = (gameId) => {
+  const refresh = (gameId) => {
     setInterval(async () => {
       try {
         const gameState = await Server.fetchGameState(gameId)
@@ -90,7 +100,7 @@ export class GameProvider extends React.Component {
     }, 500)
   }
 
-  updateThisPlayer = () => {
+  const updateThisPlayer = () => {
     const thisPlayer = this.selectThisPlayer()
     this.setState({ playerRole: thisPlayer.role, 
                     isPlayerAlive: thisPlayer.isPlayerAlive,
@@ -98,36 +108,36 @@ export class GameProvider extends React.Component {
                    })
   }
 
-  updateIsPlayerAlive = async () => {
-    await Server.updateIsPlayerAlive(this.state.gameId, this.state.playerId)
+  const updateIsPlayerAlive = async () => {
+    await Server.updateIsPlayerAlive(gameId, playerId)
     // this.setState({ isPlayerAlive: status })
   }
 
-  playerAccused = (accuseButtonId) => {
-    Server.playerAccused(this.state.gameId, accuseButtonId);
+  const accusePlayer= (accuseButtonId) => {
+    Server.accusePlayer(gameId, accuseButtonId);
   }
 
-  playerSeconded = (accuseButtonId) => {
-    Server.playerSeconded(this.state.gameId, accuseButtonId);
+  const secondPlayer = (accuseButtonId) => {
+    Server.secondPlayer(gameId, accuseButtonId);
   }
 
   // getRole = () => {
-  //   const thisPlayer = this.state.selectThisPlayer()
+  //   const thisPlayer = selectThisPlayer()
   //   this.setState({ playerRole: thisPlayer.role });
   //   // this.setState({ playerRole: "healer" });
   // }
 
-  setVote = (vote) => {
-    Server.setVote(this.state.gameId, this.state.playerId, vote)
+  const setVote = (vote) => {
+    Server.setVote(gameId, playerId, vote)
   }
 
-  startNightStage = async () => {
-    await Server.startNightStage(this.state.gameId)
+  const startNightStage = async () => {
+    await Server.startNightStage(gameId)
   }
 
-  isPlayerWerewolf = async (playerToCheckId) => {
+  const isPlayerWerewolf = async (playerToCheckId) => {
     try {
-      const result = await Server.isPlayerWerewolf(this.state.gameId, this.state.playerId, playerToCheckId)
+      const result = await Server.isPlayerWerewolf(gameId, playerId, playerToCheckId)
       return result
     } catch (error) {
       console.log('Error making IsPlayerWerewolf request to server:', error)
@@ -135,9 +145,9 @@ export class GameProvider extends React.Component {
     
   }
 
-  healPlayer = async (playerToHealId) => {
+  const healPlayer = async (playerToHealId) => {
     try {
-      await Server.healPlayer(this.state.gameId, this.state.playerId, playerToHealId)
+      await Server.healPlayer(gameId, playerId, playerToHealId)
     } catch(error) {
       console.log('Error making heal player request to server:', error)
       return false
@@ -145,62 +155,33 @@ export class GameProvider extends React.Component {
     return true
   }
 
-  chooseVictim = async (victimId) => {
+  const chooseVictim = async (victimId) => {
     try {
-      await Server.chooseVictim(this.state.gameId, this.state.playerId, victimId)
+      await Server.chooseVictim(gameId, playerId, victimId)
     } catch(error) {
       console.error(error)
     }
   }
 
-  killVictim = async (victimId) => {
+  const killVictim = async (victimId) => {
     try {
-      await Server.killVictim(this.state.gameId, this.state.playerId, victimId)
+      await Server.killVictim(gameId, playerId, victimId)
     } catch(error) {
       console.error(error)
     }
   }
 
-  state = {
-    errors: [],
-    players: [],
-    gameId: '',
-    playerName: '',
-    playerId: '',
-    playerRole: '',
-    isPlayerAlive: null,
-    suspected: null,
-    gameStage: '',
-    newGameStarted: false,
-    nightActionCompleted: false,
-    selectThisPlayer: this.selectThisPlayer,
-    createNewGame: this.createNewGame,
-    addPlayer: this.addPlayer,
-    startNewGame: this.startNewGame,
-    joinGame: this.joinGame,
-    refresh: this.refresh,
-    startGame: this.startGame,
-    updateIsPlayerAlive: this.updateIsPlayerAlive,
-    playerAccused: this.playerAccused,
-    playerSeconded: this.playerSeconded,
-    getRole: this.getRole,
-    setVote: this.setVote,
-    addError: this.addError,
-    removeError: this.removeError,
-    startNightStage: this.startNightStage,
-    isPlayerWerewolf: this.isPlayerWerewolf,
-    healPlayer: this.healPlayer,
-    chooseVictim: this.chooseVictim,
-    killVictim: this.killVictim,
-  }
+ 
 
-  render() {
+ 
     return (
       <GameContext.Provider value={this.state}>
         {this.props.children}
       </GameContext.Provider>
     );
-  }
+  
 }
 
-export const GameConsumer = GameContext.Consumer;
+
+
+// export const GameConsumer = GameContext.Consumer;

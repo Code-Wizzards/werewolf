@@ -4,14 +4,14 @@ import { GameContext } from '../../../gameManagers/game-manager';
 
 const AccuseButton = (props) => {
    const thisPlayerId = props.id;
-   const { players, playerAccused, playerSeconded } = useContext(GameContext);
+   const { players, accusePlayer, secondPlayer } = useContext(GameContext);
    const accusedPlayersIds = players.filter(player => player.suspected === 'accused').map(player => player.id)
    const isThisPlayerAccused = accusedPlayersIds.includes(thisPlayerId)
    let color;
    let buttonText;
 
    function handleClick() {
-      isThisPlayerAccused ? playerSeconded(thisPlayerId) : playerAccused(thisPlayerId);
+      isThisPlayerAccused ? secondPlayer(thisPlayerId) : accusePlayer(thisPlayerId);
    }
 
    if (isThisPlayerAccused){

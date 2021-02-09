@@ -83,6 +83,8 @@ const setStatus = (req, res) => {
   }
 }
 
+
+// do we need to separate out updating player's alive status from checking all players are ready?
 const updateIsPlayerAlive = (req, res) => {
   const gameId = req.params.gameId;
   const game = selectGame(gameId);

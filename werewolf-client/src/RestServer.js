@@ -128,11 +128,11 @@ export async function updateIsPlayerAlive(gameId, playerId) {
   return isPlayerAlive;
  }
 
- export function playerAccused(gameId, playerId) {
+ export function accusePlayer(gameId, playerId) {
   sendToServer(`/game/${gameId}/player/${playerId}/playerSuspected`, { suspected: 'accused' });
  }
 
- export function playerSeconded(gameId, playerId) {
+ export function secondPlayer(gameId, playerId) {
    sendToServer(`/game/${gameId}/player/${playerId}/playerSuspected`, { suspected: 'seconded' });
   }
 

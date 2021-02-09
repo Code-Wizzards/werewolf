@@ -56,7 +56,7 @@ const players = [
     role | string || villager, werewolf, seer, healer
     isPlayerAlive | bool
     voted | string || kill, save
-    suspected | string || null, accused, seconded, killed, saved
+    suspected | string ||  accused, seconded, killed, saved
     protected | bool default: false
     nightActionCompleted | bool | def: false
     

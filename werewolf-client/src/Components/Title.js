@@ -1,6 +1,4 @@
-import './Title.css';
-import React, { useContext } from 'react';
-import { GameContext } from '../gameManagers/game-manager'
+import React from 'react';
 
 const Title =() => {
   
