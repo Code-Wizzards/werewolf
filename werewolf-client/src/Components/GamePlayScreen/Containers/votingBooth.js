@@ -25,7 +25,7 @@ const VotingBooth = () => {
    const handleClick = (vote) => {
     
       if (theAccused.id === playerId) {
-         alert('you cannot vote for yourself')
+         alert('you cannot vote for yourself')k
       } else {
          setVote(vote)
       }  

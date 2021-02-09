@@ -4,7 +4,6 @@ const { getUniqueRandomNumber,
   changeGameStage,
   haveAllPlayersVoted,
   assignRoles,
-  selectPlayer,
   areAllNightActionsCompleted,
 } = require('../util/helper-functions')
 
@@ -144,9 +143,9 @@ const startNightStage = (req, res) => {
 const isPlayerWerewolf = (req, res) => {
   const game = selectGame(req.params.gameId)
   const { playerToCheckId, playerId } = req.body.data
-  const playerToCheck = selectPlayer(playerToCheckId, game.id)
+  const playerToCheck = getPlayer(playerToCheckId, game)
   const result = playerToCheck.role === 'werewolf'
-  const thisPlayer = selectPlayer(playerId, game.id)
+  const thisPlayer = getPlayer(playerId, game)
   thisPlayer.nightActionCompleted = true
   areAllNightActionsCompleted(game)
   res.status(200).json(result)
@@ -155,8 +154,8 @@ const isPlayerWerewolf = (req, res) => {
 const healPlayer = (req, res) => {
   const game = selectGame(req.params.gameId)
   const { playerToHealId, playerId } = req.body.data
-  const playerToHeal = selectPlayer(playerToHealId, game.id)
-  const thisPlayer = selectPlayer(playerId, game.id)
+  const playerToHeal = getPlayer(playerToHealId, game)
+  const thisPlayer = getPlayer(playerId, game)
   playerToHeal.protected = true
   thisPlayer.nightActionCompleted = true
   res.sendStatus(200)
@@ -165,7 +164,7 @@ const healPlayer = (req, res) => {
 const chooseVictim = (req, res) => {
   const game = selectGame(req.params.gameId)
   const { playerId, victimId } = req.body.data
-  const thisPlayer = selectPlayer(playerId, game.id)
+  const thisPlayer = getPlayer(playerId, game)
   thisPlayer.victimId = victimId
   areAllNightActionsCompleted(game)
   res.sendStatus(200)
@@ -174,11 +173,14 @@ const chooseVictim = (req, res) => {
 const killVictim = (req, res) => {
   const game = selectGame(req.params.gameId)
   const { victimId, playerId } = req.body.data
-  const victim = selectPlayer(victimId, game.id)
-  const thisPlayer = selectPlayer(playerId, game.id)
+  const victim = getPlayer(victimId, game.id)
+  const thisPlayer = getPlayer(playerId, game.id)
   const otherWerewolf = game.players.find(player => player.role === 'werewolf' && player.id !== playerId)
-
+  
+  if (!victim.protected) {
   victim.killedByWolf = true
+  }
+
   thisPlayer.victimId = victimId
   thisPlayer.nightActionCompleted = true
   otherWerewolf.nightActionCompleted = true

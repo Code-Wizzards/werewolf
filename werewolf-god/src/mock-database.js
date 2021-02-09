@@ -57,8 +57,9 @@ const players = [
     isPlayerAlive | bool
     voted | string || kill, save
     suspected | string || null, accused, seconded, killed, saved
-    protected | bool default: false
+    protected | bool | default: false
     nightActionCompleted | bool | def: false
+    killedByWolf | bool | def: false
     
     
 

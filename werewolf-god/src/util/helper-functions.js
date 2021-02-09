@@ -9,15 +9,15 @@ function selectGame(gameId) {
    return selectedGame;
  }
 
- function selectPlayer(playerId, gameId) {
-   const game = selectGame(gameId)
-   const playerArr = game.players.filter((player => player.id == playerId))
-   const [player] = playerArr;
-   if (!player) {
-     throw new Error (`No player with playerId ${playerId} found in game ${gameId}`)
-   }
-   return player;
- }
+//  function selectPlayer(playerId, gameId) {
+//    const game = selectGame(gameId)
+//    const playerArr = game.players.filter((player => player.id == playerId))
+//    const [player] = playerArr;
+//    if (!player) {
+//      throw new Error (`No player with playerId ${playerId} found in game ${gameId}`)
+//    }
+//    return player;
+//  }
  
  function getUniqueRandomNumber(max, arrayToCheck) {
    let newNumber;
@@ -116,7 +116,6 @@ function selectGame(gameId) {
 
  module.exports = {
     selectGame,
-    selectPlayer,
     getUniqueRandomNumber,
     getPlayer,
     assignRoles,
