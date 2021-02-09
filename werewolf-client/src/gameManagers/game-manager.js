@@ -7,23 +7,25 @@ export function GameProvider() {
   const [errors, setErrors] = useState([])
 
   const [gameId, setGameId] = useState()
-  const [gameState, setGameState] = useState({players: [], stage: '', newGameStarted: false })
-  const [playerInfo, setPlayerInfo] = useState({ name: '', id: '', role: '' })
+  const [players, setplayers] = useState([])
+  const [gameStage, setGameStage] = useState('')
+
+  const [playerInfo, setPlayerInfo] = useState({ name: '', id: '' })
 
   const [setUpFunctions] = useState({ addPlayer, joinGame, createNewGame, startGame, getRole,  })
+  const [newGameStarted, setNewGameStarted] = useState()
 
-  const [gameFunctions] = useState({ selectThisPlayer, updateIsPlayerAlive, startNightStage })
+  const [gameFunctions] = useState({ selectPlayer, updateIsPlayerAlive, startNightStage })
 
-  const [playerState, setPlayerState] = useState({ isPlayerAlive: false, 
-                                                   suspected: '', 
-                                                   nightActionCompleted: false })
+  const [playerState, setPlayerState] = useState({
+                                                  role: '', 
+                                                  isPlayerAlive: false, 
+                                                  suspected: '', 
+                                                  nightActionCompleted: false })
 
   const [playerDayActions] = useState({ accusePlayer, secondPlayer, setVote })
   const [playerNightActions] = useState({ chooseVictim, killVictim, healPlayer, isPlayerWerewolf })
   
-
-
-
   const addError = (error) => {
    setErrors(prevErrors => {
      return [...prevErrors, error]
@@ -33,32 +35,31 @@ export function GameProvider() {
 
   const removeError = () => {
     setErrors(prevErrors => {
-      prevErrors.slice(1)
+      prevErrors.shift()
       return prevErrors
     })
   }
 
-  const selectThisPlayer = () => {
+  const selectPlayer = (playerId) => {
    return players.find(player => player.id === playerId);
   }
 
   const addPlayer = async (newPlayerName) => {
-    const gameId = gameId
     const playerDetails = await Server.registerPlayer(newPlayerName, gameId)
-    this.setState({
-      playerName: playerDetails.name,
-      playerId: playerDetails.id,
-      gameStage: 'lobby'
+    setPlayerInfo({
+      name: playerDetails.name,
+      id: playerDetails.id,
     })
-    console.log(this.state)
+    setGameStage('lobby')
+    console.log({players}, {gameStage})
   };
 
   const createNewGame = async () => {
     const gameIdObj = await Server.createNewGame();
-    const gameId = gameIdObj.gameId  // grab id from object so can pass down just the number, not an object
-    this.setState({ gameId: gameId })
-    this.setState({ newGameStarted: true })
-    this.refresh(gameId)
+    const id = gameIdObj.gameId // grab id from object so can pass down just the number, not an object
+    setGameId(id)
+    setNewGameStarted(true)
+    refresh(gameId)
   };
 
   const joinGame = async (gameId) => {
@@ -67,16 +68,15 @@ export function GameProvider() {
       if (gameState.error) {
         addError(gameState.error)
       } else {
-        this.setState({ gameId: gameState.gameId })
-        this.setState({ players: gameState.players })
-        this.refresh(gameState.gameId)
+        setGameId(gameState.gameId)
+        setPlayers(gameState.players)
+        refresh(gameState.gameId)
       }
     } catch (err) {
       alert(err)
     }
   }
 
-  
 
   const startGame = async () => { // called by lobbyscreen
     const res = await Server.startGame(gameId, playerId)
@@ -91,7 +91,7 @@ export function GameProvider() {
       try {
         const gameState = await Server.fetchGameState(gameId)
         this.setState({ players: gameState.players, gameStage: gameState.stage })
-        this.updateThisPlayer()
+        updateThisPlayer()
       }
       catch (error) {
         console.log('Error refreshing gameState:', error)
@@ -101,11 +101,10 @@ export function GameProvider() {
   }
 
   const updateThisPlayer = () => {
-    const thisPlayer = this.selectThisPlayer()
-    this.setState({ playerRole: thisPlayer.role, 
+    const thisPlayer = selectPlayer(playerInfo.id)
+    setPlayerState({role: thisPlayer.role, 
                     isPlayerAlive: thisPlayer.isPlayerAlive,
-                    nightActionCompleted: thisPlayer.nightActionCompleted
-                   })
+                    nightActionCompleted: thisPlayer.nightActionCompleted})
   }
 
   const updateIsPlayerAlive = async () => {
